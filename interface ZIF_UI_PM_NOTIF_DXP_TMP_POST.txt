@@ -1,0 +1,112 @@
+interface ZIF_UI_PM_NOTIF_DXP_TMP_POST
+  public .
+
+
+  interfaces /NEPTUNE/IF_DR_OPERATION .
+  interfaces /NEPTUNE/IF_DR_OPER_POST .
+
+  types:
+    BEGIN OF ty_attachment,
+      qmnum     TYPE qmel-qmnum,
+      instid_a  TYPE sibfboriid,
+      instid_b  TYPE sibfboriid,
+      crdat     TYPE so_dat_cr,
+      crtim     TYPE so_tim_cr,
+      docdes    TYPE so_obj_des,
+      file_ext  TYPE file_ext,
+      content   TYPE string,
+      action    TYPE string,
+      icon      TYPE string,
+      highlight TYPE string,
+      user      TYPE ad_namtext,
+      username  TYPE sy-uname,
+      id        TYPE uuid,
+    END OF ty_attachment .
+  types:
+    ty_t_images TYPE STANDARD TABLE OF ty_attachment WITH NON-UNIQUE DEFAULT KEY .
+  types:
+    BEGIN OF ty_notification.
+      INCLUDE TYPE bapi2080_nothdri.
+  TYPES:
+      highlight   TYPE string,
+      icon        TYPE string,
+      tplnr       TYPE iloa-tplnr,
+      qmart       TYPE qmel-qmart,
+      qmnum       TYPE qmel-qmnum,
+      qmtxt       TYPE qmel-qmtxt,
+      malfunction TYPE ddbool_d,
+      brkdown     TYPE ddbool_d,
+      equip_desc  TYPE string,
+      floc_desc   TYPE string,
+      phase       TYPE qmel-phase,
+      status_text TYPE string,
+      long_text   TYPE string,
+      new_message TYPE ddbool_d,
+      id          TYPE uuid.
+  TYPES:
+ END OF ty_notification .
+  types:
+    BEGIN OF ty_equipment.
+      INCLUDE TYPE equi.
+  TYPES:
+      equip_desc TYPE eqkt-eqktx,
+      funct_loc  TYPE iflo-tplnr,
+      floc_desc  TYPE iflo-pltxt,
+    END OF ty_equipment .
+  types:
+    ty_t_note TYPE STANDARD TABLE OF ty_attachment WITH NON-UNIQUE DEFAULT KEY .
+
+  methods ADD_IMAGE
+    importing
+      !I_QMNUM type STRING
+    changing
+      !MS_IMAGE type TY_ATTACHMENT
+      !MS_NOTE type TY_ATTACHMENT
+      !LS_MESSAGE type /NEPTUNE/MESSAGE .
+  methods ADD_NOTE
+    importing
+      !I_QMNUM type STRING
+    changing
+      !MS_NOTE type TY_ATTACHMENT
+      !LS_MESSAGE type /NEPTUNE/MESSAGE .
+  methods CLOSE_NOTIFICATION
+    importing
+      !I_QMNUM type STRING
+    changing
+      !LS_MESSAGE type /NEPTUNE/MESSAGE .
+  methods CREATE_NOTIFICATION
+    importing
+      !MT_IMAGES type TY_T_IMAGES
+    changing
+      !MS_NOTIFICATION type TY_NOTIFICATION
+      !LS_MESSAGE type /NEPTUNE/MESSAGE .
+  methods GET_EQUIPMENT_INFO
+    importing
+      !I_EQUIPMENT type STRING
+    exporting
+      !MS_EQUIPMENT type TY_EQUIPMENT
+    changing
+      !LS_MESSAGE type /NEPTUNE/MESSAGE .
+  methods GET_NOTIFICATION
+    importing
+      !I_QMNUM type STRING
+    exporting
+      !MS_NOTIFICATION type TY_NOTIFICATION
+      !MT_NOTES type TY_T_NOTE .
+  methods GET_NOTIFICATION_IMAGES
+    importing
+      !MS_NOTIFICATION type TY_NOTIFICATION
+    exporting
+      !MT_IMAGES type TY_T_IMAGES .
+  methods SAVE_TEXT
+    importing
+      !MS_NOTIFICATION type TY_NOTIFICATION
+    changing
+      !LS_MESSAGE type /NEPTUNE/MESSAGE .
+  methods SAVE_IMAGES
+    importing
+      !MS_NOTIFICATION type TY_NOTIFICATION
+      !MT_IMAGES type TY_T_IMAGES
+    changing
+      !LS_MESSAGE type /NEPTUNE/MESSAGE .
+endinterface.

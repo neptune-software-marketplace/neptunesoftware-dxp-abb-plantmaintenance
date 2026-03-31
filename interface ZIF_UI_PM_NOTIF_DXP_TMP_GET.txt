@@ -1,0 +1,103 @@
+interface ZIF_UI_PM_NOTIF_DXP_TMP_GET
+  public .
+
+
+  interfaces /NEPTUNE/IF_DR_OPERATION .
+  interfaces /NEPTUNE/IF_DR_OPER_GET .
+
+  types:
+    BEGIN OF ty_hier.
+      INCLUDE      TYPE eam_hierarchy_element.
+  TYPES: key          TYPE string,
+      parent       TYPE string,
+      icon         TYPE string,
+      histicon     TYPE string,
+      histiconshow TYPE ddbool_d,
+      state        TYPE string,
+      searchfield  TYPE string,
+      selected     TYPE i.
+  TYPES:
+    END OF ty_hier .
+  types:
+    ty_t_hier TYPE STANDARD TABLE OF ty_hier WITH NON-UNIQUE DEFAULT KEY .
+  types:
+    BEGIN OF ty_element.
+      INCLUDE TYPE eam_hierarchy_element.
+  TYPES: tplnr TYPE tplnr,
+      tplma TYPE tplma.
+  TYPES:
+    END OF ty_element .
+  types:
+    BEGIN OF ty_notification.
+      INCLUDE TYPE bapi2080_nothdri.
+  TYPES:
+      highlight   TYPE string,
+      icon        TYPE string,
+      tplnr       TYPE iloa-tplnr,
+      qmart       TYPE qmel-qmart,
+      qmnum       TYPE qmel-qmnum,
+      qmtxt       TYPE qmel-qmtxt,
+      malfunction TYPE ddbool_d,
+      brkdown     TYPE ddbool_d,
+      equip_desc  TYPE string,
+      floc_desc   TYPE string,
+      phase       TYPE qmel-phase,
+      status_text TYPE string,
+      long_text   TYPE string,
+      new_message TYPE ddbool_d,
+      id          TYPE uuid.
+  TYPES:
+ END OF ty_notification .
+  types:
+    ty_t_notification TYPE STANDARD TABLE OF ty_notification WITH NON-UNIQUE DEFAULT KEY .
+  types:
+    ty_t_status TYPE STANDARD TABLE OF dd07v WITH NON-UNIQUE DEFAULT KEY .
+  types:
+    BEGIN OF ty_priorities.
+      INCLUDE TYPE t356_t.
+  TYPES:
+    END OF ty_priorities .
+  types:
+    ty_t_priorities TYPE STANDARD TABLE OF ty_priorities WITH NON-UNIQUE DEFAULT KEY .
+  types:
+    BEGIN OF ty_attachment,
+        qmnum     TYPE qmel-qmnum,
+        instid_a  TYPE sibfboriid,
+        instid_b  TYPE sibfboriid,
+        crdat     TYPE so_dat_cr,
+        crtim     TYPE so_tim_cr,
+        docdes    TYPE so_obj_des,
+        file_ext  TYPE file_ext,
+        content   TYPE string,
+        action    TYPE string,
+        icon      TYPE string,
+        highlight TYPE string,
+        user      TYPE ad_namtext,
+        username  TYPE sy-uname,
+        id        TYPE uuid,
+      END OF ty_attachment .
+  types:
+    ty_t_notes TYPE STANDARD TABLE OF ty_attachment WITH NON-UNIQUE DEFAULT KEY .
+
+  data MS_HIER type TY_HIER .
+  data:
+    mt_element TYPE TABLE OF ty_element .
+
+  methods GET_ALL_FLOC_EQUI
+    exporting
+      !MT_HIER type TY_T_HIER .
+  methods GET_MY_NOTIFICATIONS
+    exporting
+      !MT_NOTIFICATIONS type TY_T_NOTIFICATION
+      !MT_NOTES type TY_T_NOTES .
+  methods GET_STRUCTURE
+    importing
+      !I_FUNCLOC type IFLOT-TPLNR
+      !I_EQUIPMENT type DDBOOL_D
+    returning
+      value(R_STRUCTURE) like MT_ELEMENT .
+  methods INITIALIZE
+    exporting
+      !MT_STATUS type TY_T_STATUS
+      !MT_PRIORITIES type TY_T_PRIORITIES .
+endinterface.

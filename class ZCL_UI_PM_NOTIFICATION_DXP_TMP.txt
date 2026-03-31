@@ -1,0 +1,1712 @@
+class ZCL_UI_PM_NOTIFICATION_DXP_TMP definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces /NEPTUNE/IF_DR_OPERATION .
+  interfaces /NEPTUNE/IF_DR_OPER_GET .
+  interfaces /NEPTUNE/IF_DR_OPER_POST .
+  interfaces /NEPTUNE/IF_DR_RUNTIME .
+  interfaces ZIF_UI_PM_NOTIF_DXP_TMP_GET .
+  interfaces ZIF_UI_PM_NOTIF_DXP_TMP_POST .
+
+  types:
+    BEGIN OF ty_hier.
+        INCLUDE      TYPE eam_hierarchy_element.
+    TYPES: key          TYPE string,
+        parent       TYPE string,
+        icon         TYPE string,
+        histicon     TYPE string,
+        histiconshow TYPE ddbool_d,
+        state        TYPE string,
+        searchfield  TYPE string,
+        selected     TYPE i.
+    TYPES:
+      END OF ty_hier .
+  types:
+    BEGIN OF ty_element.
+        INCLUDE TYPE eam_hierarchy_element.
+    TYPES: tplnr TYPE tplnr,
+        tplma TYPE tplma.
+    TYPES:
+      END OF ty_element .
+  types:
+    BEGIN OF ty_topnode.
+        INCLUDE TYPE iflotx.
+    TYPES: searchstring TYPE string.
+    TYPES: END OF ty_topnode .
+  types:
+    BEGIN OF ty_notification.
+        INCLUDE TYPE bapi2080_nothdri.
+    TYPES:
+        highlight   TYPE string,
+        icon        TYPE string,
+        tplnr       TYPE iloa-tplnr,
+        qmart       TYPE qmel-qmart,
+        qmnum       TYPE qmel-qmnum,
+        qmtxt       TYPE qmel-qmtxt,
+        malfunction TYPE ddbool_d,
+        brkdown     TYPE ddbool_d,
+        equip_desc  TYPE string,
+        floc_desc   TYPE string,
+        phase       TYPE qmel-phase,
+        status_text TYPE string,
+        long_text   TYPE string,
+        new_message TYPE ddbool_d,
+        id          TYPE uuid.
+    TYPES:
+   END OF ty_notification .
+  types:
+    BEGIN OF ty_attachment,
+        qmnum     TYPE qmel-qmnum,
+        instid_a  TYPE sibfboriid,
+        instid_b  TYPE sibfboriid,
+        crdat     TYPE so_dat_cr,
+        crtim     TYPE so_tim_cr,
+        docdes    TYPE so_obj_des,
+        file_ext  TYPE file_ext,
+        content   TYPE string,
+        action    TYPE string,
+        icon      TYPE string,
+        highlight TYPE string,
+        user      TYPE ad_namtext,
+        username  TYPE sy-uname,
+        id        TYPE uuid,
+      END OF ty_attachment .
+  types:
+    BEGIN OF ty_equipment.
+        INCLUDE TYPE equi.
+    TYPES:
+        equip_desc TYPE eqkt-eqktx,
+        funct_loc  TYPE iflo-tplnr,
+        floc_desc  TYPE iflo-pltxt,
+      END OF ty_equipment .
+
+  data GET type ref to ZIF_UI_PM_NOTIF_DXP_TMP_GET .
+  data POST type ref to ZIF_UI_PM_NOTIF_DXP_TMP_POST .
+*  data MS_NOTE type TY_ATTACHMENT .
+  data:
+    mt_element TYPE TABLE OF ty_element .
+  data MS_TOPNODE type TY_TOPNODE .
+
+
+  data MV_QMNUM type QMNUM .
+
+  methods CONSTRUCTOR .
+protected section.
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_UI_PM_NOTIFICATION_DXP_TMP IMPLEMENTATION.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->CONSTRUCTOR
+* +-------------------------------------------------------------------------------------------------+
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method CONSTRUCTOR.
+
+  /neptune/cl_dr_utilities=>instance->fill_attributes_with_object( io_object = me ).
+
+  endmethod.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_GET~GET_ALL_FLOC_EQUI
+* +-------------------------------------------------------------------------------------------------+
+* | [<---] MT_HIER                        TYPE        TY_T_HIER
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_get~get_all_floc_equi.
+    DATA: ls_iflot   TYPE iflot,
+          lt_hier    LIKE mt_element,
+          ls_hier    LIKE LINE OF lt_hier,
+          ls_hierout TYPE ty_hier,
+          lv_funcloc TYPE iflot-tplnr,
+          lv_index   TYPE sy-tabix.
+    FIELD-SYMBOLS <hier> LIKE ls_hier.
+
+    FREE: mt_hier[].
+* select single * from iflot into ls_iflot where tplma = ''.
+*  lv_funcloc = '000'.
+*    CALL METHOD ZIF_UI_PM_NOTIF_DXP_TMP_GET=>get_structure
+    CALL METHOD ZIF_UI_PM_NOTIF_DXP_TMP_GET~GET_STRUCTURE
+      EXPORTING
+        i_funcloc   = ms_topnode-tplnr
+        i_equipment = abap_true
+      RECEIVING
+        r_structure = lt_hier.
+
+    SORT lt_hier BY object predecessor.
+    DELETE ADJACENT DUPLICATES FROM lt_hier COMPARING object predecessor.
+
+
+    LOOP AT lt_hier INTO ls_hier.
+
+
+      MOVE-CORRESPONDING ls_hier TO ls_hierout.
+
+      IF ls_hier-object_type = 'E'.
+        ls_hierout-icon         = 'sap-icon://machine'.
+        ls_hierout-state        = 'Warning'.
+        ls_hierout-histicon     = 'sap-icon://activity-items'.
+        ls_hierout-histiconshow = 'X'.
+        SHIFT ls_hierout-object LEFT DELETING LEADING '0'.
+      ELSE.
+        ls_hierout-icon         = 'sap-icon://functional-location'.
+        ls_hierout-state        = 'Success'.
+        ls_hierout-histicon     = 'sap-icon://activity-items'. " Now functional locations also have history
+        ls_hierout-histiconshow = 'X'.
+      ENDIF.
+
+      CONCATENATE 'K' ls_hier-object INTO ls_hierout-key.
+      IF ls_hier-predecessor IS NOT INITIAL.
+        CONCATENATE 'K' ls_hier-predecessor INTO ls_hierout-parent.
+      ENDIF.
+
+      CASE  ls_hier-object_type.
+        WHEN 'E'.
+          SELECT SINGLE eqktx INTO ls_hierout-description
+            FROM eqkt WHERE equnr = ls_hier-object
+                   AND ( spras = sy-langu OR spras = 'DA' ).
+        WHEN 'T'.
+          SELECT SINGLE pltxt INTO ls_hierout-description
+          FROM iflotx WHERE tplnr = ls_hier-object
+          AND ( spras = sy-langu OR spras = 'DA' ).
+      ENDCASE.
+
+      CONCATENATE ls_hierout-object ls_hierout-description INTO ls_hierout-searchfield.
+      TRANSLATE ls_hierout-searchfield TO UPPER CASE.
+      APPEND ls_hierout TO mt_hier.
+
+
+      CLEAR: ls_hier, ls_hierout.
+    ENDLOOP.
+
+    SORT mt_hier BY object.
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_GET~GET_MY_NOTIFICATIONS
+* +-------------------------------------------------------------------------------------------------+
+* | [<---] MT_NOTIFICATIONS               TYPE        TY_T_NOTIFICATION
+* | [<---] MT_NOTES                       TYPE        TY_T_NOTES
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_get~get_my_notifications.
+    DATA: lt_qmel         TYPE TABLE OF qmel,
+          ls_notification TYPE ty_notification,
+          lv_header       TYPE bapi2080_nothdre,
+          lv_hdr_txt      TYPE bapi2080_nothdtxte,
+          lt_status       TYPE TABLE OF dd07v,
+          lt_longtext     TYPE TABLE OF tline,
+          lv_stxh         TYPE stxh.
+
+*Notes retrieval variables
+    DATA: ls_sofc       TYPE v_sofc,
+          ls_note       TYPE ty_attachment,
+          lv_doc_id     TYPE sofolenti1-doc_id,
+          lt_srgbtbrel  TYPE STANDARD TABLE OF srgbtbrel,
+          ls_sofolentil TYPE sofolenti1,
+          lv_instid     TYPE string,
+          lv_typeid     TYPE string,
+          lt_content    TYPE STANDARD TABLE OF solisti1,
+          lt_notes      TYPE STANDARD TABLE OF ty_attachment,
+          ls_user       TYPE bapiaddr3,
+          lt_return     TYPE STANDARD TABLE OF bapiret2.
+
+    DATA: BEGIN OF lv_key,
+            foltp TYPE so_fol_tp,
+            folyr TYPE so_fol_yr,
+            folno TYPE so_fol_no,
+            doctp TYPE so_doc_tp,
+            docyr TYPE so_doc_yr,
+            docno TYPE so_doc_no,
+          END OF lv_key.
+
+    TYPES:
+      BEGIN OF ty_instid_a,
+        instid_a TYPE sibfboriid,
+      END OF ty_instid_a.
+
+    DATA: lt_instid_a TYPE STANDARD TABLE OF ty_instid_a,
+          lv_instid_a TYPE ty_instid_a.
+
+*Get Notifications
+    SELECT qmnum phase FROM viqmel
+      INTO CORRESPONDING FIELDS OF TABLE lt_qmel
+      WHERE ernam EQ sy-uname
+      AND phase NOT IN (4, 5).
+
+    CHECK lt_qmel IS NOT INITIAL.
+
+* Do this so that we can FOR ALL ENTRIES later.
+    LOOP AT lt_qmel ASSIGNING FIELD-SYMBOL(<qmel>).
+      lv_instid_a-instid_a = <qmel>-qmnum.
+      APPEND lv_instid_a TO lt_instid_a.
+      CLEAR lv_instid_a.
+    ENDLOOP.
+
+*Get Status descriptions
+    CALL FUNCTION 'DD_DOMVALUES_GET'
+      EXPORTING
+        domname        = 'QM_PHASE'
+        text           = 'X'
+        langu          = sy-langu
+      TABLES
+        dd07v_tab      = lt_status
+      EXCEPTIONS
+        wrong_textflag = 1
+        OTHERS         = 2.
+
+    "$. Region ### GET NOTES for all notifications before looping ###
+
+    lv_typeid = 'BUS2038'.
+
+* Get GOS Relation
+    SELECT *
+      FROM srgbtbrel
+      INTO CORRESPONDING FIELDS OF TABLE lt_srgbtbrel
+      FOR ALL ENTRIES IN lt_instid_a
+           WHERE instid_a = lt_instid_a-instid_a
+             AND typeid_a EQ lv_typeid
+             AND reltype  EQ 'NOTE'
+      .
+
+    SORT lt_srgbtbrel BY instid_b.
+    DELETE ADJACENT DUPLICATES FROM lt_srgbtbrel COMPARING instid_b.
+
+* Get Attachment/Comment
+    LOOP AT lt_srgbtbrel ASSIGNING FIELD-SYMBOL(<ls_srgbtbrel>).
+
+      lv_key = <ls_srgbtbrel>-instid_b.
+
+*   Get Document Info
+      SELECT SINGLE *
+             FROM v_sofc
+             INTO ls_sofc
+             WHERE foltp EQ lv_key-foltp
+               AND folyr EQ lv_key-folyr
+               AND folno EQ lv_key-folno
+               AND doctp EQ lv_key-doctp
+               AND docyr EQ lv_key-docyr
+               AND docno EQ lv_key-docno.
+
+      CHECK sy-subrc EQ 0.
+
+      TRANSLATE ls_sofc-file_ext TO UPPER CASE.
+      IF ls_sofc-file_ext EQ 'TXT'.
+        ls_sofc-file_ext = 'TXT'.
+      ENDIF.
+
+      lv_doc_id = <ls_srgbtbrel>-instid_b.
+
+      CALL FUNCTION 'SO_DOCUMENT_READ_API1'
+        EXPORTING
+          document_id                = lv_doc_id
+        IMPORTING
+          document_data              = ls_sofolentil
+        TABLES
+          object_content             = lt_content
+        EXCEPTIONS
+          document_id_not_exist      = 1
+          operation_no_authorization = 2
+          x_error                    = 3
+          OTHERS                     = 4.
+
+*   Build String
+      LOOP AT lt_content ASSIGNING FIELD-SYMBOL(<content>).
+        CONCATENATE ls_note-content <content>-line INTO ls_note-content SEPARATED BY cl_abap_char_utilities=>cr_lf.
+      ENDLOOP.
+
+      ls_note-qmnum = <ls_srgbtbrel>-instid_a.
+      ls_note-instid_a = <ls_srgbtbrel>-instid_a.
+      ls_note-instid_b = <ls_srgbtbrel>-instid_b.
+      ls_note-docdes = ls_sofc-docdes.
+      ls_note-file_ext = ls_sofc-file_ext.
+      ls_note-crdat = ls_sofc-crdat.
+      ls_note-crtim = ls_sofc-crtim.
+      ls_note-username = ls_sofolentil-creat_name.
+
+      CALL FUNCTION 'BAPI_USER_GET_DETAIL'
+        EXPORTING
+          username      = ls_note-username
+          cache_results = 'X'
+        IMPORTING
+          address       = ls_user
+        TABLES
+          return        = lt_return.
+
+      ls_note-user = ls_user-fullname.
+
+      IF ls_note-username EQ sy-uname.
+        ls_note-icon = 'sap-icon://fa-regular/user'.
+      ELSE.
+        ls_note-icon = 'sap-icon://fa-solid/user-shield'.
+      ENDIF.
+
+      APPEND ls_note TO mt_notes.
+      CLEAR ls_note.
+
+    ENDLOOP.
+
+    SORT mt_notes BY crdat DESCENDING crtim DESCENDING.
+    "$. Endregion ### GET NOTES ###
+
+    CLEAR ls_note.
+
+    LOOP AT lt_qmel ASSIGNING FIELD-SYMBOL(<notification>).
+      CLEAR ls_notification.
+
+      CALL FUNCTION 'BAPI_ALM_NOTIF_GET_DETAIL'
+        EXPORTING
+          number             = <notification>-qmnum
+        IMPORTING
+          notifheader_export = lv_header
+          notifhdtext        = lv_hdr_txt.
+
+*Only add it to returning structure if not marked for deletion
+      IF NOT lv_header-sys_status CS 'DLFL'.
+
+        MOVE-CORRESPONDING lv_header TO ls_notification.
+
+*   Get Text Header
+        SELECT SINGLE *
+               FROM stxh
+               INTO CORRESPONDING FIELDS OF lv_stxh
+               WHERE tdobject EQ 'QMEL'
+                 AND tdname	  EQ <notification>-qmnum
+                 AND tdspras  EQ sy-langu.
+
+        IF sy-subrc EQ 0.
+
+*     Get Text
+          CALL FUNCTION 'READ_TEXT'
+            EXPORTING
+              id                      = lv_stxh-tdid
+              language                = lv_stxh-tdspras
+              name                    = lv_stxh-tdname
+              object                  = lv_stxh-tdobject
+            TABLES
+              lines                   = lt_longtext
+            EXCEPTIONS
+              id                      = 1
+              language                = 2
+              name                    = 3
+              not_found               = 4
+              object                  = 5
+              reference_check         = 6
+              wrong_access_to_archive = 7
+              OTHERS                  = 8.
+        ENDIF.
+
+*Add appropriate carriage returns
+        LOOP AT lt_longtext ASSIGNING FIELD-SYMBOL(<textline>).
+          SHIFT <textline>-tdline LEFT DELETING LEADING '*'.
+          SHIFT <textline>-tdline LEFT DELETING LEADING space.
+          CONCATENATE ls_notification-long_text
+                      <textline>-tdline
+                      cl_abap_char_utilities=>cr_lf
+                      INTO ls_notification-long_text.
+        ENDLOOP.
+
+*Are there new messages?
+*        SELECT qmnum crdat crtim user username FROM mt_notes AS notes
+*          INTO CORRESPONDING FIELDS OF TABLE lt_notes
+*          WHERE qmnum EQ <notification>-qmnum.
+        REFRESH lt_notes.
+
+        LOOP AT mt_notes INTO ls_note WHERE qmnum EQ <notification>-qmnum.
+          APPEND ls_note TO lt_notes.
+        ENDLOOP.
+
+        SORT lt_notes BY crdat DESCENDING crtim DESCENDING.
+
+        CLEAR ls_note.
+        READ TABLE lt_notes INTO ls_note INDEX 1.
+
+        IF ls_note IS NOT INITIAL AND ( ls_note-username IS NOT INITIAL AND ls_note-username NE sy-uname ).
+          ls_notification-icon = 'sap-icon://notification-2'.
+          ls_notification-highlight = 'Information'.
+        ELSE.
+          ls_notification-icon = 'sap-icon://notification'.
+          ls_notification-highlight = 'None'.
+        ENDIF.
+
+*Other data
+        ls_notification-qmnum = <notification>-qmnum.
+        ls_notification-equip_desc = lv_hdr_txt-equidescr.
+        ls_notification-floc_desc = lv_hdr_txt-funcldescr.
+        ls_notification-phase = <notification>-phase.
+
+        IF lv_header-breakdown EQ abap_true.
+          ls_notification-brkdown = abap_true.
+        ELSE.
+          ls_notification-malfunction = abap_true.
+        ENDIF.
+
+        READ TABLE lt_status WITH KEY domvalue_l = ls_notification-phase ASSIGNING FIELD-SYMBOL(<status>).
+        ls_notification-status_text = <status>-ddtext.
+
+        APPEND ls_notification TO mt_notifications.
+      ENDIF.
+    ENDLOOP.
+
+    SORT mt_notifications BY qmnum.
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_GET~GET_STRUCTURE
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] I_FUNCLOC                      TYPE        IFLOT-TPLNR
+* | [--->] I_EQUIPMENT                    TYPE        DDBOOL_D
+* | [<-()] R_STRUCTURE                    LIKE        MT_ELEMENT
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_get~get_structure.
+    DATA: ls_structure TYPE ty_element,
+          ls_iflo      TYPE iflo,
+          lt_iflo      LIKE TABLE OF ls_iflo,
+          lt_iflo_del  LIKE TABLE OF ls_iflo,
+          ls_equi      TYPE equi
+          .
+    DATA: lv_level TYPE string.
+    FIELD-SYMBOLS: <struc>    LIKE ls_iflo,
+                   <strucout> LIKE ls_structure.
+    IF i_funcloc IS NOT INITIAL.
+      SELECT SINGLE tplnr pltxt objnr tplma iloan FROM iflo INTO CORRESPONDING FIELDS OF ls_iflo
+        WHERE tplnr = i_funcloc
+        AND lvorm = ''
+        AND spras = sy-langu.
+*      and iwerk = '1710'.
+      APPEND ls_iflo TO lt_iflo.
+    ELSE.
+      SELECT  tplnr pltxt objnr tplma iloan FROM iflo INTO CORRESPONDING FIELDS OF TABLE lt_iflo
+       WHERE tplma = ''
+       AND lvorm = ''
+       AND spras = sy-langu.
+*      and iwerk = '1710'.
+    ENDIF.
+
+    FREE: lt_iflo_del[].
+    LOOP AT lt_iflo ASSIGNING <struc>.
+      SELECT SINGLE COUNT(*) FROM jest WHERE objnr = <struc>-objnr
+        AND ( ( stat = 'I0076' ) OR ( stat = 'I0320' ) )
+        AND inact = ''.
+      IF sy-subrc EQ 0.
+        APPEND <struc> TO lt_iflo_del.
+      ENDIF.
+    ENDLOOP.
+    IF ( NOT lt_iflo_del[] IS INITIAL ).
+      "
+      " Eliminates invalid functional locations
+      SORT lt_iflo BY tplnr.
+      SORT lt_iflo_del BY tplnr.
+      DELETE ADJACENT DUPLICATES FROM lt_iflo     COMPARING tplnr.
+      DELETE ADJACENT DUPLICATES FROM lt_iflo_del COMPARING tplnr.
+      LOOP AT lt_iflo_del ASSIGNING <struc>.
+        LOOP AT lt_iflo TRANSPORTING NO FIELDS
+          WHERE tplnr EQ <struc>-tplnr.
+          EXIT. " There are records to eliminate
+        ENDLOOP.
+        IF ( sy-subrc EQ 0 ).
+          DELETE lt_iflo WHERE tplnr EQ <struc>-tplnr.
+        ENDIF.
+      ENDLOOP.
+    ENDIF.
+
+    FREE: lt_iflo_del[].
+    LOOP AT lt_iflo ASSIGNING <struc>.
+      SELECT tplnr pltxt objnr tplma iloan FROM iflo INTO (ls_iflo-tplnr, ls_iflo-pltxt, ls_iflo-objnr, ls_iflo-tplma, ls_iflo-iloan)
+         WHERE tplma = <struc>-tplnr
+         AND spras = sy-langu.
+*      and iwerk = '1710'.
+        SELECT SINGLE COUNT(*) FROM jest WHERE objnr = ls_iflo-objnr
+          AND ( ( stat = 'I0076' ) OR ( stat = 'I0320' ) )
+          AND inact = ''.
+        IF sy-subrc EQ 0.
+          APPEND ls_iflo TO lt_iflo_del.
+        ELSE.
+          APPEND ls_iflo TO lt_iflo.
+        ENDIF.
+        CLEAR ls_iflo.
+      ENDSELECT.
+    ENDLOOP.
+    IF ( NOT lt_iflo_del IS INITIAL ).
+      "
+      " Eliminates invalid functional locations
+      SORT lt_iflo BY tplnr.
+      SORT lt_iflo_del BY tplnr.
+      DELETE ADJACENT DUPLICATES FROM lt_iflo     COMPARING tplnr.
+      DELETE ADJACENT DUPLICATES FROM lt_iflo_del COMPARING tplnr.
+      LOOP AT lt_iflo_del ASSIGNING <struc>.
+        LOOP AT lt_iflo TRANSPORTING NO FIELDS
+          WHERE tplnr EQ <struc>-tplnr.
+          EXIT. " There are records to eliminate
+        ENDLOOP.
+        IF ( sy-subrc EQ 0 ).
+          DELETE lt_iflo WHERE tplnr EQ <struc>-tplnr.
+        ENDIF.
+      ENDLOOP.
+    ENDIF.
+
+    LOOP AT lt_iflo ASSIGNING <struc>.
+      APPEND INITIAL LINE TO r_structure ASSIGNING <strucout>.
+      MOVE-CORRESPONDING <struc> TO <strucout>.
+
+      CALL FUNCTION 'CONVERSION_EXIT_TPLNR_OUTPUT'
+        EXPORTING
+          input  = <struc>-tplnr
+        IMPORTING
+          output = <strucout>-object.
+      CALL FUNCTION 'CONVERSION_EXIT_TPLNR_OUTPUT'
+        EXPORTING
+          input  = <struc>-tplma
+        IMPORTING
+          output = <strucout>-predecessor.
+      <strucout>-description = <struc>-pltxt.
+      <strucout>-object_type = 'T'.
+    ENDLOOP.
+
+
+    IF i_equipment IS NOT INITIAL.
+      LOOP AT r_structure ASSIGNING <strucout> WHERE object_type = 'T'.
+        SELECT c~equnr d~objnr INTO (ls_structure-object, ls_equi-objnr)
+          FROM iflot AS a
+          JOIN  iloa AS b
+          ON a~tplnr = b~tplnr
+          JOIN equz AS c
+          ON b~iloan = c~iloan
+          JOIN equi AS d
+          ON c~equnr = d~equnr
+          WHERE a~tplnr = <strucout>-tplnr
+          AND b~owner = ''
+          AND d~lvorm = ''
+          AND a~iwerk
+          = '1710'.
+          ls_structure-object_type = 'E'.
+          ls_structure-predecessor = <strucout>-object.
+          ls_structure-tplma       = <strucout>-tplnr.
+
+          SELECT SINGLE COUNT(*) FROM jest WHERE objnr = ls_equi-objnr
+          AND stat = 'I0076'
+          AND inact = ''.
+          IF sy-subrc NE 0.
+            APPEND ls_structure TO r_structure.
+          ENDIF.
+        ENDSELECT.
+      ENDLOOP.
+    ENDIF.
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_GET~INITIALIZE
+* +-------------------------------------------------------------------------------------------------+
+* | [<---] MT_STATUS                      TYPE        TY_T_STATUS
+* | [<---] MT_PRIORITIES                  TYPE        TY_T_PRIORITIES
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_get~initialize.
+    DATA:      ls_status LIKE LINE OF mt_status.
+
+    CONSTANTS: c_spras TYPE sy-langu VALUE 'EN',
+               c_artpr TYPE artpr VALUE 'PM'.
+
+* Retrieve priorities list
+    SELECT * FROM t356_t INTO TABLE mt_priorities
+      WHERE spras = c_spras AND
+            artpr = c_artpr
+      ORDER BY priok.
+
+* Retrieve QM status list
+    CALL FUNCTION 'DD_DOMVALUES_GET'
+      EXPORTING
+        domname        = 'QM_PHASE'
+        text           = 'X'
+        langu          = sy-langu
+      TABLES
+        dd07v_tab      = mt_status
+      EXCEPTIONS
+        wrong_textflag = 1
+        OTHERS         = 2.
+
+    ls_status-domvalue_l = 0.
+    ls_status-ddtext = 'All'.
+    INSERT ls_status INTO mt_status INDEX 1.
+
+* Dont bring deleted or completed
+    DELETE mt_status WHERE domvalue_l EQ 4 OR domvalue_l EQ 5.
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~ADD_IMAGE
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] I_QMNUM                        TYPE        STRING
+* | [<-->] MS_IMAGE                       TYPE        TY_ATTACHMENT
+* | [<-->] MS_NOTE                        TYPE        TY_ATTACHMENT
+* | [<-->] LS_MESSAGE                     TYPE        /NEPTUNE/MESSAGE
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~add_image.
+
+    DATA: lv_folder_id   TYPE soodk,
+          lv_object_id   TYPE soobjinfi1-object_id,
+          lv_rolea       TYPE borident,
+          lv_roleb       TYPE borident,
+          lv_pre         TYPE string,
+          lv_data        TYPE string,
+          lv_datax       TYPE xstring,
+          lv_doc_type    TYPE soodk-objtp,
+          lv_doc_data    TYPE sodocchgi1,
+          lv_doc_info    TYPE sofolenti1,
+          it_solix       TYPE STANDARD TABLE OF solix,
+          lv_qmnum       TYPE qmel-qmnum,
+*          ls_message     TYPE /neptune/message,
+          lv_qmnum_clean TYPE qmel-qmnum.
+
+    CHECK i_qmnum IS NOT INITIAL.
+
+*Convert QMNUM
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        input  = i_qmnum
+      IMPORTING
+        output = lv_qmnum.
+
+* Get Root Folder
+    CALL FUNCTION 'SO_FOLDER_ROOT_ID_GET'
+      EXPORTING
+        owner     = sy-uname
+        region    = 'B'
+      IMPORTING
+        folder_id = lv_folder_id.
+
+    lv_object_id = lv_folder_id.
+
+    SPLIT ms_image-content AT ',' INTO lv_pre lv_data.
+
+    lv_doc_type = 'JPG'.
+
+*   Document Information
+    lv_doc_data-obj_name   = 'Picture'. "lv_data(12)
+    lv_doc_data-obj_descr  = lv_qmnum.
+    lv_doc_data-obj_langu  = sy-langu.
+    lv_doc_data-doc_size   = strlen( lv_data ).
+
+*   Decode Base64
+    CALL FUNCTION 'SCMS_BASE64_DECODE_STR'
+      EXPORTING
+        input  = lv_data
+      IMPORTING
+        output = lv_datax
+      EXCEPTIONS
+        failed = 1
+        OTHERS = 2.
+
+*   Convert to table
+    CALL METHOD cl_document_bcs=>xstring_to_solix
+      EXPORTING
+        ip_xstring = lv_datax
+      RECEIVING
+        rt_solix   = it_solix.
+
+*   Insert Document
+    CALL FUNCTION 'SO_DOCUMENT_INSERT_API1'
+      EXPORTING
+        folder_id                  = lv_object_id
+        document_data              = lv_doc_data
+        document_type              = lv_doc_type
+      IMPORTING
+        document_info              = lv_doc_info
+      TABLES
+        contents_hex               = it_solix
+      EXCEPTIONS
+        folder_not_exist           = 1
+        document_type_not_exist    = 2
+        operation_no_authorization = 3
+        parameter_error            = 4
+        x_error                    = 5
+        enqueue_error              = 6
+        OTHERS                     = 7.
+
+*    Relation Keys
+    lv_rolea-objtype = 'BUS2038'.
+    lv_rolea-objkey  = lv_qmnum.
+
+    lv_roleb-objtype = 'MESSAGE'.
+    CONCATENATE lv_folder_id
+                lv_doc_info-object_id
+                INTO lv_roleb-objkey RESPECTING BLANKS.
+
+*   Create Relation
+    CALL FUNCTION 'BINARY_RELATION_CREATE_COMMIT'
+      EXPORTING
+        obj_rolea      = lv_rolea
+        obj_roleb      = lv_roleb
+        relationtype   = 'ATTA'
+      EXCEPTIONS
+        no_model       = 1
+        internal_error = 2
+        unknown        = 3
+        OTHERS         = 4.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_OUTPUT'
+      EXPORTING
+        input  = i_qmnum
+      IMPORTING
+        output = lv_qmnum_clean.
+
+    IF sy-subrc EQ 0.
+      CONCATENATE 'Image added successfully to Notification #' lv_qmnum_clean INTO ls_message-message SEPARATED BY space.
+      ls_message-type = 'S'.
+    ELSE.
+      CONCATENATE 'There was an issue adding the image to Notification  #' lv_qmnum_clean INTO ls_message-message SEPARATED BY space.
+      ls_message-type = 'E'.
+    ENDIF.
+
+*Add note stating user has added an image to this notification
+    CLEAR ms_note.
+    ms_note-content = 'Automated update: Added an image to this notification'.
+
+    CALL METHOD zif_ui_pm_notif_dxp_tmp_post~add_note
+      EXPORTING
+        i_qmnum = i_qmnum
+      CHANGING
+        ms_note = ms_note
+        ls_message = ls_message.
+
+    CLEAR ms_note.
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~ADD_NOTE
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] I_QMNUM                        TYPE        STRING
+* | [<-->] MS_NOTE                        TYPE        TY_ATTACHMENT
+* | [<-->] LS_MESSAGE                     TYPE        /NEPTUNE/MESSAGE
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~add_note.
+
+    DATA: lv_folder_id   TYPE soodk,
+          lv_object_id   TYPE soobjinfi1-object_id,
+          lv_rolea       TYPE borident,
+          lv_roleb       TYPE borident,
+          lv_doc_type    TYPE soodk-objtp,
+          lv_doc_data    TYPE sodocchgi1,
+          lv_doc_info    TYPE sofolenti1,
+*          ls_message     TYPE /neptune/message,
+          ls_content     TYPE solisti1,
+          lt_content     TYPE STANDARD TABLE OF solisti1,
+          lt_string      TYPE TABLE OF string,
+          lv_qmnum       TYPE qmel-qmnum,
+          lv_qmnum_clean TYPE qmel-qmnum.
+
+    IF ms_note-content IS NOT INITIAL.
+
+*Convert QMNUM
+      CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+        EXPORTING
+          input  = i_qmnum
+        IMPORTING
+          output = lv_qmnum.
+
+      CALL FUNCTION 'CONVERSION_EXIT_ALPHA_OUTPUT'
+        EXPORTING
+          input  = i_qmnum
+        IMPORTING
+          output = lv_qmnum_clean.
+
+      SPLIT ms_note-content AT cl_abap_char_utilities=>cr_lf INTO TABLE lt_string.
+      LOOP AT lt_string ASSIGNING FIELD-SYMBOL(<line>).
+        ls_content-line = <line>.
+        APPEND ls_content TO lt_content.
+        CLEAR  ls_content.
+      ENDLOOP.
+
+* Get Root Folder
+      CALL FUNCTION 'SO_FOLDER_ROOT_ID_GET'
+        EXPORTING
+          owner     = sy-uname
+          region    = 'B'
+        IMPORTING
+          folder_id = lv_folder_id.
+
+      lv_object_id = lv_folder_id.
+      lv_doc_type = 'TXT'.
+
+*   Document Information
+      CONCATENATE 'Note by' sy-uname '-' sy-datum INTO lv_doc_data-obj_descr SEPARATED BY space.
+      lv_doc_data-obj_name = sy-uname.
+      lv_doc_data-obj_langu  = sy-langu.
+      lv_doc_data-doc_size   = strlen( ms_note-content ).
+
+*   Insert Document
+      CALL FUNCTION 'SO_DOCUMENT_INSERT_API1'
+        EXPORTING
+          folder_id                  = lv_object_id
+          document_data              = lv_doc_data
+          document_type              = lv_doc_type
+        IMPORTING
+          document_info              = lv_doc_info
+        TABLES
+          object_content             = lt_content
+        EXCEPTIONS
+          folder_not_exist           = 1
+          document_type_not_exist    = 2
+          operation_no_authorization = 3
+          parameter_error            = 4
+          x_error                    = 5
+          enqueue_error              = 6
+          OTHERS                     = 7.
+
+*    Relation Keys
+      lv_rolea-objtype = 'BUS2038'.
+      lv_rolea-objkey  = i_qmnum.
+
+      lv_roleb-objtype = 'MESSAGE'.
+      CONCATENATE lv_folder_id
+                  lv_doc_info-object_id
+                  INTO lv_roleb-objkey RESPECTING BLANKS.
+
+*   Create Relation
+      CALL FUNCTION 'BINARY_RELATION_CREATE_COMMIT'
+        EXPORTING
+          obj_rolea      = lv_rolea
+          obj_roleb      = lv_roleb
+          relationtype   = 'NOTE'
+        EXCEPTIONS
+          no_model       = 1
+          internal_error = 2
+          unknown        = 3
+          OTHERS         = 4.
+
+      IF sy-subrc EQ 0.
+        CONCATENATE 'Note added successfully to Notification #' lv_qmnum_clean INTO ls_message-message SEPARATED BY space.
+        ls_message-type = 'S'.
+      ELSE.
+        CONCATENATE 'There was an issue adding the note to Notification #' lv_qmnum_clean INTO ls_message-message SEPARATED BY space.
+        ls_message-type = 'E'.
+      ENDIF.
+
+    ENDIF.
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~CLOSE_NOTIFICATION
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] I_QMNUM                        TYPE        STRING
+* | [<-->] LS_MESSAGE                     TYPE        /NEPTUNE/MESSAGE
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~close_notification.
+
+    DATA: lt_return   TYPE TABLE OF bapiret2,
+          lv_notif_no TYPE bapi2080_nothdre-notif_no,
+          lv_sys_stat TYPE bapi2080_notsti.
+*          ls_message  TYPE /neptune/message.
+
+    lv_notif_no = i_qmnum.
+    lv_sys_stat-langu = sy-langu.
+    lv_sys_stat-languiso = sy-langu.
+    lv_sys_stat-refdate = sy-datum.
+
+    CALL FUNCTION 'BAPI_ALM_NOTIF_CLOSE'
+      EXPORTING
+        number   = lv_notif_no
+        syststat = lv_sys_stat
+      TABLES
+        return   = lt_return.
+
+    READ TABLE lt_return TRANSPORTING NO FIELDS WITH KEY type = 'E'.
+    IF sy-subrc EQ 0.
+      ROLLBACK WORK.
+      LOOP AT lt_return ASSIGNING FIELD-SYMBOL(<return>).
+        MOVE-CORRESPONDING <return> TO ls_message.
+      ENDLOOP.
+    ELSE.
+      ls_message-message = 'Notification completed successfully!'.
+      ls_message-type = 'S'.
+
+      COMMIT WORK.
+    ENDIF.
+
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~CREATE_NOTIFICATION
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] MT_IMAGES                      TYPE        TY_T_IMAGES
+* | [<-->] MS_NOTIFICATION                TYPE        TY_NOTIFICATION
+* | [<-->] LS_MESSAGE                     TYPE        /NEPTUNE/MESSAGE
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~create_notification.
+
+    DATA: lv_header  TYPE bapi2080_nothdri,
+          lv_headerx TYPE bapi2080_nothdri_x,
+          lv_hexport TYPE bapi2080_nothdre,
+          lv_error   TYPE string,
+          lt_return  TYPE STANDARD TABLE OF bapiret2,
+          lv_qmart   TYPE qmel-qmart.
+*          ls_message TYPE /neptune/message.
+
+
+    CLEAR mv_qmnum.
+
+* Convert Functional Location
+    CALL FUNCTION 'CONVERSION_EXIT_TPLNR_INPUT'
+      EXPORTING
+        input     = ms_notification-tplnr
+      IMPORTING
+        output    = ms_notification-tplnr
+      EXCEPTIONS
+        not_found = 1
+        OTHERS    = 2.
+
+* Data Fields
+    MOVE-CORRESPONDING ms_notification TO lv_header.
+
+    IF ms_notification-brkdown EQ abap_true.
+      lv_qmart = 'M1'.
+      ms_notification-breakdown = abap_true.
+    ELSE.
+      lv_qmart = 'M2'.
+    ENDIF.
+
+
+
+* Plant and Work Centers - maybe this can come off SU3 or some other parameters
+* table in the future. For now - hardcode
+    SELECT SINGLE objid FROM crhd INTO lv_header-pm_wkctr WHERE arbpl EQ 'ASSEMBLY'.
+    lv_header-planplant = '1710'.
+    lv_header-maintplant = '1710'.
+
+* Fields to Update
+    lv_headerx-funct_loc   = abap_true.
+    lv_headerx-short_text  = abap_true.
+    lv_headerx-priority    = abap_true.
+    lv_headerx-desstdate   = abap_true.
+    lv_headerx-dessttime   = abap_true.
+    lv_headerx-desenddate  = abap_true.
+    lv_headerx-desendtm    = abap_true.
+    lv_headerx-code_group  = abap_true.
+    lv_headerx-coding      = abap_true.
+    lv_headerx-maintroom   = abap_true.
+    lv_headerx-maintplant   = abap_true.
+    lv_headerx-planplant   = abap_true.
+    lv_headerx-pm_wkctr    = abap_true.
+    lv_headerx-maintloc     = abap_true.
+    lv_headerx-reportedby  = abap_true.
+    lv_headerx-division    = abap_true.
+    lv_headerx-sales_org   = abap_true.
+    lv_headerx-distr_chan  = abap_true.
+    lv_headerx-breakdown   = abap_true.
+    lv_headerx-strmlfndate = abap_true.
+    lv_headerx-strmlfntime = abap_true.
+    lv_headerx-short_text = abap_true.
+
+*--------------------------------------------------------------------*
+* CREATE
+*--------------------------------------------------------------------*
+
+* Create Notification
+    CALL FUNCTION 'BAPI_ALM_NOTIF_CREATE'
+      EXPORTING
+        notif_type         = lv_qmart
+        notifheader        = lv_header
+      IMPORTING
+        notifheader_export = lv_hexport
+      TABLES
+        return             = lt_return.
+
+    ms_notification-qmnum = lv_hexport-notif_no.
+
+* Save Notification
+    CALL FUNCTION 'BAPI_ALM_NOTIF_SAVE'
+      EXPORTING
+        number      = ms_notification-qmnum
+      IMPORTING
+        notifheader = lv_hexport
+      TABLES
+        return      = lt_return.
+
+    ms_notification-qmnum = lv_hexport-notif_no.
+
+    IF lv_hexport-notif_no NE ''.
+
+      CALL FUNCTION 'CONVERSION_EXIT_ALPHA_OUTPUT'
+        EXPORTING
+          input  = ms_notification-qmnum
+        IMPORTING
+          output = mv_qmnum.
+
+      CONCATENATE 'Notification' mv_qmnum 'created successfully' INTO ls_message-message SEPARATED BY space.
+      ls_message-type = 'S'.
+
+
+    ELSE.
+      LOOP AT lt_return ASSIGNING FIELD-SYMBOL(<return>).
+        MOVE-CORRESPONDING <return> TO ls_message.
+
+      ENDLOOP.
+    ENDIF.
+
+*--------------------------------------------------------------------*
+* ERROR HANDLING
+*--------------------------------------------------------------------*
+
+* No Error -> Delete & Commit
+    IF lv_error EQ space.
+
+*    Commit
+      CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+        EXPORTING
+          wait = abap_true.
+
+*    Save Text
+*      me->save_text( ).
+      CALL METHOD zif_ui_pm_notif_dxp_tmp_post~save_text
+        EXPORTING
+          ms_notification = ms_notification
+        CHANGING
+          ls_message = ls_message.
+
+*    Save Images
+*      me->save_images( ).
+      CALL METHOD zif_ui_pm_notif_dxp_tmp_post~save_images
+        EXPORTING
+          ms_notification = ms_notification
+          mt_images       = mt_images
+        CHANGING
+          ls_message = ls_message.
+
+    ENDIF.
+
+    COMMIT WORK AND WAIT.
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~GET_EQUIPMENT_INFO
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] I_EQUIPMENT                    TYPE        STRING
+* | [<---] MS_EQUIPMENT                   TYPE        TY_EQUIPMENT
+* | [<-->] LS_MESSAGE                     TYPE        /NEPTUNE/MESSAGE
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~get_equipment_info.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        input  = i_equipment
+      IMPORTING
+        output = ms_equipment-equnr.
+
+    SELECT single
+                  d~*,
+                  a~tplnr AS funct_loc,
+                  a~pltxt AS floc_desc,
+                  e~eqktx AS equip_desc
+    INTO CORRESPONDING FIELDS OF @ms_equipment
+    FROM iflo AS a
+    JOIN  iloa AS b
+    ON a~tplnr = b~tplnr
+    JOIN equz AS c
+    ON b~iloan = c~iloan
+    JOIN equi AS d
+    ON c~equnr = d~equnr
+    JOIN eqkt AS e
+    ON c~equnr = e~equnr
+    WHERE d~equnr = @ms_equipment-equnr
+      AND e~spras EQ @sy-langu
+      AND a~spras EQ @sy-langu.
+
+    IF sy-subrc NE 0.
+      ls_message-message = 'Equipment not found'.
+      ls_message-type = 'E'.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~GET_NOTIFICATION
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] I_QMNUM                        TYPE        STRING
+* | [<---] MS_NOTIFICATION                TYPE        TY_NOTIFICATION
+* | [<---] MT_NOTES                       TYPE        TY_T_NOTE
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~get_notification.
+
+    DATA: lt_qmel     TYPE TABLE OF qmel,
+          lv_header   TYPE bapi2080_nothdre,
+          lv_hdr_txt  TYPE bapi2080_nothdtxte,
+          lt_status   TYPE TABLE OF dd07v,
+          lt_longtext TYPE TABLE OF tline.
+
+*Notes retrieval variables
+    DATA: ls_sofc       TYPE v_sofc,
+          ls_note       TYPE ty_attachment,
+          lv_doc_id     TYPE sofolenti1-doc_id,
+          lt_srgbtbrel  TYPE STANDARD TABLE OF srgbtbrel,
+          ls_sofolentil TYPE sofolenti1,
+          lv_instid     TYPE string,
+          lv_typeid     TYPE string,
+          lt_content    TYPE STANDARD TABLE OF solisti1,
+          lt_notes      TYPE STANDARD TABLE OF ty_attachment,
+          ls_user       TYPE bapiaddr3,
+          lt_return     TYPE STANDARD TABLE OF bapiret2.
+
+    DATA: BEGIN OF lv_key,
+            foltp TYPE so_fol_tp,
+            folyr TYPE so_fol_yr,
+            folno TYPE so_fol_no,
+            doctp TYPE so_doc_tp,
+            docyr TYPE so_doc_yr,
+            docno TYPE so_doc_no,
+          END OF lv_key.
+
+    TYPES:
+      BEGIN OF ty_instid_a,
+        instid_a TYPE sibfboriid,
+      END OF ty_instid_a.
+
+    DATA: lt_instid_a TYPE STANDARD TABLE OF ty_instid_a,
+          lv_instid_a TYPE ty_instid_a.
+
+    CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+      EXPORTING
+        input  = i_qmnum
+      IMPORTING
+        output = ms_notification-qmnum.
+
+*Get Notifications
+    SELECT SINGLE qmnum phase FROM viqmel
+      INTO CORRESPONDING FIELDS OF ms_notification
+      WHERE qmnum EQ ms_notification-qmnum
+      AND phase NOT IN (4, 5).
+
+    CHECK ms_notification IS NOT INITIAL.
+
+*Get Status descriptions
+    CALL FUNCTION 'DD_DOMVALUES_GET'
+      EXPORTING
+        domname        = 'QM_PHASE'
+        text           = 'X'
+        langu          = sy-langu
+      TABLES
+        dd07v_tab      = lt_status
+      EXCEPTIONS
+        wrong_textflag = 1
+        OTHERS         = 2.
+
+    "$. Region ### GET NOTES for all notifications before looping ###
+
+    lv_typeid = 'BUS2038'.
+
+* Get GOS Relation
+    SELECT *
+      FROM srgbtbrel
+      INTO TABLE lt_srgbtbrel
+      WHERE instid_a = ms_notification-qmnum
+             AND typeid_a EQ lv_typeid
+             AND reltype  EQ 'NOTE'.
+
+    SORT lt_srgbtbrel BY instid_b.
+    DELETE ADJACENT DUPLICATES FROM lt_srgbtbrel COMPARING instid_b.
+
+* Get Attachment/Comment
+    LOOP AT lt_srgbtbrel ASSIGNING FIELD-SYMBOL(<ls_srgbtbrel>).
+
+      lv_key = <ls_srgbtbrel>-instid_b.
+
+*   Get Document Info
+      SELECT SINGLE *
+             FROM v_sofc
+             INTO ls_sofc
+             WHERE foltp EQ lv_key-foltp
+               AND folyr EQ lv_key-folyr
+               AND folno EQ lv_key-folno
+               AND doctp EQ lv_key-doctp
+               AND docyr EQ lv_key-docyr
+               AND docno EQ lv_key-docno.
+
+      CHECK sy-subrc EQ 0.
+
+      TRANSLATE ls_sofc-file_ext TO UPPER CASE.
+      IF ls_sofc-file_ext EQ 'TXT'.
+        ls_sofc-file_ext = 'TXT'.
+      ENDIF.
+
+      lv_doc_id = <ls_srgbtbrel>-instid_b.
+
+      CALL FUNCTION 'SO_DOCUMENT_READ_API1'
+        EXPORTING
+          document_id                = lv_doc_id
+        IMPORTING
+          document_data              = ls_sofolentil
+        TABLES
+          object_content             = lt_content
+        EXCEPTIONS
+          document_id_not_exist      = 1
+          operation_no_authorization = 2
+          x_error                    = 3
+          OTHERS                     = 4.
+
+*   Build String
+      LOOP AT lt_content ASSIGNING FIELD-SYMBOL(<content>).
+        CONCATENATE ls_note-content <content>-line INTO ls_note-content SEPARATED BY cl_abap_char_utilities=>cr_lf.
+      ENDLOOP.
+
+      ls_note-qmnum = <ls_srgbtbrel>-instid_a.
+      ls_note-instid_a = <ls_srgbtbrel>-instid_a.
+      ls_note-instid_b = <ls_srgbtbrel>-instid_b.
+      ls_note-docdes = ls_sofc-docdes.
+      ls_note-file_ext = ls_sofc-file_ext.
+      ls_note-crdat = ls_sofc-crdat.
+      ls_note-crtim = ls_sofc-crtim.
+      ls_note-username = ls_sofolentil-creat_name.
+
+      CALL FUNCTION 'BAPI_USER_GET_DETAIL'
+        EXPORTING
+          username      = ls_note-username
+          cache_results = 'X'
+        IMPORTING
+          address       = ls_user
+        TABLES
+          return        = lt_return.
+
+      ls_note-user = ls_user-fullname.
+
+      IF ls_note-username EQ sy-uname.
+        ls_note-icon = 'sap-icon://fa-regular/user'.
+      ELSE.
+        ls_note-icon = 'sap-icon://fa-solid/user-shield'.
+      ENDIF.
+
+      APPEND ls_note TO mt_notes.
+      CLEAR ls_note.
+
+    ENDLOOP.
+
+    SORT mt_notes BY crdat DESCENDING crtim DESCENDING.
+    "$. Endregion ### GET NOTES ###
+
+    CALL FUNCTION 'BAPI_ALM_NOTIF_GET_DETAIL'
+      EXPORTING
+        number             = ms_notification-qmnum
+      IMPORTING
+        notifheader_export = lv_header
+        notifhdtext        = lv_hdr_txt.
+
+*Only add it to returning structure if not marked for deletion
+    IF NOT lv_header-sys_status CS 'DLFL'.
+
+      MOVE-CORRESPONDING lv_header TO ms_notification.
+
+*   Get Text Header
+      SELECT SINGLE *
+             FROM stxh
+             INTO @DATA(lv_stxh)
+             WHERE tdobject EQ 'QMEL'
+               AND tdname	  EQ @ms_notification-qmnum
+               AND tdspras  EQ @sy-langu.
+
+      IF sy-subrc EQ 0.
+
+*     Get Text
+        CALL FUNCTION 'READ_TEXT'
+          EXPORTING
+            id                      = lv_stxh-tdid
+            language                = lv_stxh-tdspras
+            name                    = lv_stxh-tdname
+            object                  = lv_stxh-tdobject
+          TABLES
+            lines                   = lt_longtext
+          EXCEPTIONS
+            id                      = 1
+            language                = 2
+            name                    = 3
+            not_found               = 4
+            object                  = 5
+            reference_check         = 6
+            wrong_access_to_archive = 7
+            OTHERS                  = 8.
+      ENDIF.
+
+*Add appropriate carriage returns
+      LOOP AT lt_longtext ASSIGNING FIELD-SYMBOL(<textline>).
+        SHIFT <textline>-tdline LEFT DELETING LEADING '*'.
+        SHIFT <textline>-tdline LEFT DELETING LEADING space.
+        CONCATENATE ms_notification-long_text
+                    <textline>-tdline
+                    cl_abap_char_utilities=>cr_lf
+                    INTO ms_notification-long_text.
+      ENDLOOP.
+
+*Are there new messages?
+      SELECT qmnum, crdat, crtim, user FROM @mt_notes AS notes
+        WHERE qmnum EQ @ms_notification-qmnum
+        INTO CORRESPONDING FIELDS OF TABLE @lt_notes.
+
+      SORT lt_notes BY crdat DESCENDING crtim DESCENDING.
+
+      READ TABLE lt_notes INTO ls_note INDEX 1.
+      IF ls_note IS NOT INITIAL AND ls_note-username NE sy-uname.
+        ms_notification-icon = 'sap-icon://notification-2'.
+        ms_notification-highlight = 'None'.
+      ELSE.
+        ms_notification-icon = 'sap-icon://notification'.
+        ms_notification-highlight = 'Information'.
+      ENDIF.
+
+*Other data
+      ms_notification-qmnum = ms_notification-qmnum.
+      ms_notification-equip_desc = lv_hdr_txt-equidescr.
+      ms_notification-floc_desc = lv_hdr_txt-funcldescr.
+      ms_notification-phase = ms_notification-phase.
+
+      IF lv_header-breakdown EQ abap_true.
+        ms_notification-brkdown = abap_true.
+      ELSE.
+        ms_notification-malfunction = abap_true.
+      ENDIF.
+
+      READ TABLE lt_status WITH KEY domvalue_l = ms_notification-phase ASSIGNING FIELD-SYMBOL(<status>).
+      ms_notification-status_text = <status>-ddtext.
+
+    ENDIF.
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~GET_NOTIFICATION_IMAGES
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] MS_NOTIFICATION                TYPE        TY_NOTIFICATION
+* | [<---] MT_IMAGES                      TYPE        TY_T_IMAGES
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~get_notification_images.
+
+    DATA: ls_sofc       TYPE v_sofc,
+          ls_image      TYPE ty_attachment,
+          lv_instid_a   TYPE srgbtbrel-instid_a,
+          lv_doc_id     TYPE sofolenti1-doc_id,
+          lt_srgbtbrel  TYPE STANDARD TABLE OF srgbtbrel,
+          ls_sofolentil TYPE sofolenti1,
+          lt_hex        TYPE STANDARD TABLE OF solix,
+          lv_xstring    TYPE xstring.
+
+    DATA: BEGIN OF lv_key,
+            foltp TYPE so_fol_tp,
+            folyr TYPE so_fol_yr,
+            folno TYPE so_fol_no,
+            doctp TYPE so_doc_tp,
+            docyr TYPE so_doc_yr,
+            docno TYPE so_doc_no,
+          END OF lv_key.
+
+    DATA: lv_instid TYPE string,
+          lv_typeid TYPE string.
+
+    CHECK ms_notification IS NOT INITIAL.
+
+    lv_typeid = 'BUS2038'.
+    lv_instid = ms_notification-qmnum.
+
+* Get GOS Relation
+    SELECT *
+           FROM srgbtbrel
+           INTO TABLE lt_srgbtbrel
+           WHERE instid_a EQ lv_instid
+             AND typeid_a EQ lv_typeid
+             AND reltype  EQ 'ATTA'.
+
+    SORT lt_srgbtbrel BY instid_b.
+    DELETE ADJACENT DUPLICATES FROM lt_srgbtbrel COMPARING instid_b.
+
+* Get Attachment/Comment
+    LOOP AT lt_srgbtbrel ASSIGNING FIELD-SYMBOL(<ls_srgbtbrel>).
+
+      lv_key = <ls_srgbtbrel>-instid_b.
+
+*   Get Document Info
+      SELECT SINGLE *
+             FROM v_sofc
+             INTO ls_sofc
+             WHERE foltp EQ lv_key-foltp
+               AND folyr EQ lv_key-folyr
+               AND folno EQ lv_key-folno
+               AND doctp EQ lv_key-doctp
+               AND docyr EQ lv_key-docyr
+               AND docno EQ lv_key-docno.
+
+      CHECK sy-subrc EQ 0.
+
+      TRANSLATE ls_sofc-file_ext TO UPPER CASE.
+      CHECK ls_sofc-file_ext EQ 'JPE' OR ls_sofc-file_ext EQ 'JPG'.
+      IF ls_sofc-file_ext EQ 'JPE'.
+        ls_sofc-file_ext = 'JPG'.
+      ENDIF.
+
+      lv_doc_id = <ls_srgbtbrel>-instid_b.
+
+      CALL FUNCTION 'SO_DOCUMENT_READ_API1'
+        EXPORTING
+          document_id                = lv_doc_id
+        IMPORTING
+          document_data              = ls_sofolentil
+        TABLES
+*         object_header              = it_header
+          contents_hex               = lt_hex
+        EXCEPTIONS
+          document_id_not_exist      = 1
+          operation_no_authorization = 2
+          x_error                    = 3
+          OTHERS                     = 4.
+
+*   Build String
+      CLEAR lv_xstring.
+      LOOP AT lt_hex ASSIGNING FIELD-SYMBOL(<ls_hex>).
+        CONCATENATE lv_xstring
+                    <ls_hex>-line
+                    INTO lv_xstring IN BYTE MODE.
+      ENDLOOP.
+
+*   Base64 Encoding
+      CALL FUNCTION 'SCMS_BASE64_ENCODE_STR'
+        EXPORTING
+          input  = lv_xstring
+        IMPORTING
+          output = ls_image-content.
+
+      CONCATENATE 'data:image/jpeg;base64,' ls_image-content INTO ls_image-content.
+
+      ls_image-instid_a = <ls_srgbtbrel>-instid_a.
+      ls_image-instid_b = <ls_srgbtbrel>-instid_b.
+      ls_image-docdes = ls_sofc-docdes.
+      ls_image-file_ext = ls_sofc-file_ext.
+      ls_image-crdat = ls_sofc-crdat.
+      ls_image-crtim = ls_sofc-crtim.
+
+      APPEND ls_image TO mt_images.
+      CLEAR ls_image.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~SAVE_IMAGES
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] MS_NOTIFICATION                TYPE        TY_NOTIFICATION
+* | [--->] MT_IMAGES                      TYPE        TY_T_IMAGES
+* | [<-->] LS_MESSAGE                     TYPE        /NEPTUNE/MESSAGE
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~save_images.
+
+    DATA: lv_folder_id TYPE soodk,
+          lv_object_id TYPE soobjinfi1-object_id,
+          lv_rolea     TYPE borident,
+          lv_roleb     TYPE borident,
+          lv_pre       TYPE string,
+          lv_data      TYPE string,
+          lv_datax     TYPE xstring,
+          lv_doc_type  TYPE soodk-objtp,
+          lv_doc_data  TYPE sodocchgi1,
+          lv_doc_info  TYPE sofolenti1,
+          it_solix     TYPE STANDARD TABLE OF solix.
+
+* Get Root Folder
+    CALL FUNCTION 'SO_FOLDER_ROOT_ID_GET'
+      EXPORTING
+        owner     = sy-uname
+        region    = 'B'
+      IMPORTING
+        folder_id = lv_folder_id.
+
+    lv_object_id = lv_folder_id.
+
+    LOOP AT mt_images ASSIGNING FIELD-SYMBOL(<image>).
+
+      SPLIT <image>-content AT ',' INTO lv_pre lv_data.
+
+      lv_doc_type = 'JPG'.
+
+*   Document Information
+      lv_doc_data-obj_name   = 'Picture'. "lv_data(12)
+      lv_doc_data-obj_descr  = ms_notification-qmnum.
+      lv_doc_data-obj_langu  = sy-langu.
+      lv_doc_data-doc_size   = strlen( lv_data ).
+
+*   Decode Base64
+      CALL FUNCTION 'SCMS_BASE64_DECODE_STR'
+        EXPORTING
+          input  = lv_data
+        IMPORTING
+          output = lv_datax
+        EXCEPTIONS
+          failed = 1
+          OTHERS = 2.
+
+*   Convert to table
+      CALL METHOD cl_document_bcs=>xstring_to_solix
+        EXPORTING
+          ip_xstring = lv_datax
+        RECEIVING
+          rt_solix   = it_solix.
+
+*   Insert Document
+      CALL FUNCTION 'SO_DOCUMENT_INSERT_API1'
+        EXPORTING
+          folder_id                  = lv_object_id
+          document_data              = lv_doc_data
+          document_type              = lv_doc_type
+        IMPORTING
+          document_info              = lv_doc_info
+        TABLES
+          contents_hex               = it_solix
+        EXCEPTIONS
+          folder_not_exist           = 1
+          document_type_not_exist    = 2
+          operation_no_authorization = 3
+          parameter_error            = 4
+          x_error                    = 5
+          enqueue_error              = 6
+          OTHERS                     = 7.
+
+*    Relation Keys
+      lv_rolea-objtype = 'BUS2038'.
+      lv_rolea-objkey  = ms_notification-qmnum.
+
+      lv_roleb-objtype = 'MESSAGE'.
+      CONCATENATE lv_folder_id
+                  lv_doc_info-object_id
+                  INTO lv_roleb-objkey RESPECTING BLANKS.
+
+*   Create Relation
+      CALL FUNCTION 'BINARY_RELATION_CREATE_COMMIT'
+        EXPORTING
+          obj_rolea      = lv_rolea
+          obj_roleb      = lv_roleb
+          relationtype   = 'ATTA'
+        EXCEPTIONS
+          no_model       = 1
+          internal_error = 2
+          unknown        = 3
+          OTHERS         = 4.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_UI_PM_NOTIFICATION_DXP_TMP->ZIF_UI_PM_NOTIF_DXP_TMP_POST~SAVE_TEXT
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] MS_NOTIFICATION                TYPE        TY_NOTIFICATION
+* | [<-->] LS_MESSAGE                     TYPE        /NEPTUNE/MESSAGE
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD zif_ui_pm_notif_dxp_tmp_post~save_text.
+
+    DATA: lt_longtext TYPE STANDARD TABLE OF string,
+          ls_longtext TYPE string,
+          lt_final    TYPE STANDARD TABLE OF tline,
+          ls_final    LIKE LINE OF lt_final,
+          lv_thead    TYPE thead,
+          lv_date     TYPE string,
+          lv_time     TYPE string,
+          lv_user     TYPE string.
+
+    IF ms_notification-long_text IS NOT INITIAL.
+
+*Header timestamp line
+      CALL FUNCTION 'CONVERSION_EXIT_LDATE_OUTPUT'
+        EXPORTING
+          input  = sy-datum
+        IMPORTING
+          output = lv_date.
+
+      CALL FUNCTION 'CONVERSION_EXIT_THHMM_OUTPUT'
+        EXPORTING
+          input  = sy-uzeit
+        IMPORTING
+          output = lv_time.
+
+      CONCATENATE '(' sy-uname ')' INTO lv_user.
+
+      CONCATENATE lv_date
+                  lv_time
+                  lv_user
+                  INTO ls_longtext SEPARATED BY space RESPECTING BLANKS.
+
+      SPLIT ms_notification-long_text AT cl_abap_char_utilities=>newline INTO TABLE lt_longtext.
+
+*Text Header
+      lv_thead-tdid     = 'LTXT'.
+      lv_thead-tdobject = 'QMEL'.
+      lv_thead-tdspras  = sy-langu.
+      lv_thead-tdname   = ms_notification-qmnum.
+
+*Get existing text if any
+      CLEAR lt_final.
+      CALL FUNCTION 'READ_TEXT'
+        EXPORTING
+          id                      = lv_thead-tdid
+          language                = sy-langu
+          name                    = lv_thead-tdname
+          object                  = lv_thead-tdobject
+        TABLES
+          lines                   = lt_final
+        EXCEPTIONS
+          id                      = 1
+          language                = 2
+          name                    = 3
+          not_found               = 4
+          object                  = 5
+          reference_check         = 6
+          wrong_access_to_archive = 7
+          OTHERS                  = 8.
+
+*Concatenate existing text with new text
+      ls_final-tdformat = '*'.
+      ls_final-tdline   = ls_longtext.
+      APPEND ls_final TO lt_final.
+      CLEAR:  ls_final, ls_longtext.
+
+      LOOP AT lt_longtext ASSIGNING FIELD-SYMBOL(<text>).
+        ls_final-tdformat = '*'.
+        ls_final-tdline   = <text>.
+        APPEND ls_final TO lt_final.
+        CLEAR  ls_final.
+      ENDLOOP.
+
+*Save Text
+      CALL FUNCTION 'SAVE_TEXT'
+        EXPORTING
+          header          = lv_thead
+          savemode_direct = 'X'
+        TABLES
+          lines           = lt_final
+        EXCEPTIONS
+          id              = 1
+          language        = 2
+          name            = 3
+          object          = 4
+          OTHERS          = 5.
+
+*Update QMEL table Long Text flag so that IW22/IW23 displays the text
+      UPDATE qmel SET indtx = abap_true WHERE qmnum = ms_notification-qmnum.
+
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.
