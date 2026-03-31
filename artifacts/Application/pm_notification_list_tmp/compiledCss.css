@@ -1,0 +1,17 @@
+.PMStatus .sapMObjStatusText {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.PMNum .sapMObjStatusText {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.PMNotifList .sapMLIBHighlightInformation {
+  background: red;
+}
+
+/*.sapMLIBHighlightInformation {*/
+/*    background: red;*/
+/*}*/

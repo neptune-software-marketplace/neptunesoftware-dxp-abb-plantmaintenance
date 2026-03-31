@@ -1,0 +1,29 @@
+/*.sapMObjStatusIcon > .sapUiIcon {*/
+/*    font-size: 1.3rem;*/
+/*}*/
+/*.sapMObjectNumberText {*/
+/*    font-size: 0.675rem;*/
+/*}*/
+/*.sapMText {*/
+/*    font-size: 0.675rem;*/
+/*}*/
+.nepEquiHistoryIcon {
+    padding: 6px 12px 6px 12px;
+    cursor: pointer;
+}
+/*.sapUiBody {*/
+/*    font-size: 1.5rem;*/
+/*}*/
+/*.sapMObjectNumberText {*/
+/*    font-size: 1rem;*/
+/*}*/
+
+/*.sapMText,*/
+/*.sapMListTbl .sapMText, .sapMListTbl .sapMLabel {*/
+/*    font-size: 1.1rem;*/
+/*}*/
+
+
+.sapUiTableDataCell>.sapUiTableCellInner, .sapUiTableCreationRow .sapUiTableCreationRowForm .sapUiTableCell>.sapUiTableCellInner {
+    padding: 0 0rem;
+}

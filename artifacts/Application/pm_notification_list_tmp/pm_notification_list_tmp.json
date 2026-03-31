@@ -1,0 +1,1748 @@
+{
+	"id": "fabaf8ce-6894-f011-b3cd-000d3ab202d6",
+	"createdAt": "2025-09-18T08:23:52.836Z",
+	"createdBy": "daniel.vieira@neptune-software.com",
+	"objects": [
+		{
+			"fieldNo": "13ab0c73-d175-42d0-b13c-8136a0e88694",
+			"fieldName": "App",
+			"fieldParent": 0,
+			"fieldType": "sap.m.App",
+			"script": "",
+			"request": [],
+			"response": [],
+			"attributes": [],
+			"data": [
+				{
+					"fieldNo": "9dbab2e3-0ab0-48c7-bfe4-44a0759da3c4",
+					"fieldName": "MyNotificationsPage",
+					"fieldParent": "13ab0c73-d175-42d0-b13c-8136a0e88694",
+					"fieldType": "sap.m.Page",
+					"script": "",
+					"request": [],
+					"response": [],
+					"attributes": [
+						{
+							"attribute": "title",
+							"grouping": "Properties",
+							"value": "My Notifications",
+							"script": "",
+							"translation": []
+						},
+						{
+							"attribute": "showNavButton",
+							"grouping": "Properties",
+							"value": "true",
+							"script": "",
+							"translation": []
+						},
+						{
+							"attribute": "navButtonPress",
+							"grouping": "Events",
+							"value": "AppCacheNav.back();",
+							"script": "AppCacheNav.back();",
+							"translation": []
+						}
+					],
+					"data": [
+						{
+							"fieldNo": "d96e64f7-ab1c-4f07-a9d9-ee9354c7d1ca",
+							"fieldName": "BarHeader",
+							"fieldParent": "9dbab2e3-0ab0-48c7-bfe4-44a0759da3c4",
+							"fieldType": "sap.m.Bar",
+							"script": "",
+							"request": [],
+							"response": [],
+							"attributes": [
+								{
+									"attribute": "position",
+									"grouping": "Parent",
+									"value": "setSubHeader",
+									"script": "",
+									"translation": []
+								}
+							],
+							"data": [
+								{
+									"fieldNo": "8b7e3876-938a-44bc-d6bf-bee011157814",
+									"fieldName": "ContentLeft",
+									"fieldParent": "d96e64f7-ab1c-4f07-a9d9-ee9354c7d1ca",
+									"fieldType": "neptune.BarContent",
+									"script": "",
+									"request": [],
+									"response": [],
+									"attributes": [
+										{
+											"attribute": "position",
+											"grouping": "Parent",
+											"value": "ContentLeft",
+											"script": "",
+											"translation": []
+										}
+									],
+									"data": [
+										{
+											"fieldNo": "0dbefc59-c2fd-4e50-8f70-fd97d149f41d",
+											"fieldName": "HBox1",
+											"fieldParent": "8b7e3876-938a-44bc-d6bf-bee011157814",
+											"fieldType": "sap.m.HBox",
+											"script": "",
+											"request": [],
+											"response": [],
+											"attributes": [
+												{
+													"attribute": "width",
+													"grouping": "Properties",
+													"value": "100%",
+													"script": "",
+													"translation": []
+												}
+											],
+											"data": [
+												{
+													"fieldNo": "ed12ceb4-0325-4fa6-c56d-27a164516aa6",
+													"fieldName": "NotificationsSearchField",
+													"fieldParent": "0dbefc59-c2fd-4e50-8f70-fd97d149f41d",
+													"fieldType": "sap.m.SearchField",
+													"script": "",
+													"request": [],
+													"response": [],
+													"attributes": [
+														{
+															"attribute": "width",
+															"grouping": "Properties",
+															"value": "100%",
+															"script": "",
+															"translation": []
+														},
+														{
+															"attribute": "liveChange",
+															"grouping": "Events",
+															"value": "Anonymous Function",
+															"script": "file://event/sap.m.SearchField/NotificationsSearchField/liveChange.js",
+															"language": "javascript",
+															"translation": []
+														}
+													],
+													"data": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"fieldNo": "ec26af09-0f25-4f42-db77-c8295709dc69",
+									"fieldName": "ContentRight",
+									"fieldParent": "d96e64f7-ab1c-4f07-a9d9-ee9354c7d1ca",
+									"fieldType": "neptune.BarContent",
+									"script": "",
+									"request": [],
+									"response": [],
+									"attributes": [
+										{
+											"attribute": "position",
+											"grouping": "Parent",
+											"value": "ContentRight",
+											"script": "",
+											"translation": []
+										}
+									],
+									"data": [
+										{
+											"fieldNo": "b30d49b7-51bd-4b2c-d3cf-6b3b01fb9fab",
+											"fieldName": "HBox",
+											"fieldParent": "ec26af09-0f25-4f42-db77-c8295709dc69",
+											"fieldType": "sap.m.HBox",
+											"script": "",
+											"request": [],
+											"response": [],
+											"attributes": [],
+											"data": [
+												{
+													"fieldNo": "9c905d2d-4e91-4410-8796-b3bc530cf423",
+													"fieldName": "StatusSelect",
+													"fieldParent": "b30d49b7-51bd-4b2c-d3cf-6b3b01fb9fab",
+													"fieldType": "sap.m.Select",
+													"script": "",
+													"bindingType": "h",
+													"bindingSource": "DataModel",
+													"bindingParentID": "6550d66c-295d-4318-fe91-4af74a370c52",
+													"modelPath": "Initialize>/MT_STATUS",
+													"request": [],
+													"response": [],
+													"attributes": [
+														{
+															"attribute": "change",
+															"grouping": "Events",
+															"value": "Anonymous Function",
+															"script": "file://event/sap.m.Select/StatusSelect/change.js",
+															"language": "javascript",
+															"translation": []
+														}
+													],
+													"data": [
+														{
+															"fieldNo": "12c90da6-ffc3-466c-ca53-11bc479f93be",
+															"fieldName": "Item",
+															"fieldParent": "9c905d2d-4e91-4410-8796-b3bc530cf423",
+															"fieldType": "sap.ui.core.Item",
+															"script": "",
+															"request": [],
+															"response": [],
+															"attributes": [
+																{
+																	"attribute": "text",
+																	"grouping": "Properties",
+																	"value": "{Initialize>DDTEXT}",
+																	"script": "",
+																	"translation": []
+																},
+																{
+																	"attribute": "key",
+																	"grouping": "Properties",
+																	"value": "{Initialize>DOMVALUE_L}",
+																	"script": "",
+																	"translation": []
+																}
+															],
+															"data": []
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"fieldNo": "a826099f-88b9-4f93-9404-47e83bf7d323",
+							"fieldName": "NotificationsList",
+							"fieldParent": "9dbab2e3-0ab0-48c7-bfe4-44a0759da3c4",
+							"fieldType": "sap.m.List",
+							"script": "",
+							"bindingType": "h",
+							"bindingSource": "DataModel",
+							"bindingParentID": "d9644264-d732-46bc-89d2-6104088597a9",
+							"modelPath": "NotificationsModel>/MT_NOTIFICATIONS",
+							"request": [],
+							"response": [],
+							"attributes": [
+								{
+									"attribute": "modeAnimationOn",
+									"grouping": "Properties",
+									"value": "false",
+									"script": "",
+									"translation": []
+								}
+							],
+							"data": [
+								{
+									"fieldNo": "74c4b5b6-1bfa-4c33-cee7-ca3111f1bcd1",
+									"fieldName": "CustomListItem",
+									"fieldParent": "a826099f-88b9-4f93-9404-47e83bf7d323",
+									"fieldType": "sap.m.CustomListItem",
+									"script": "",
+									"request": [],
+									"response": [],
+									"attributes": [
+										{
+											"attribute": "type",
+											"grouping": "Properties",
+											"value": "Navigation",
+											"script": "",
+											"translation": []
+										},
+										{
+											"attribute": "highlight",
+											"grouping": "Properties",
+											"value": "{NotificationsModel>HIGHLIGHT}",
+											"script": "",
+											"translation": []
+										},
+										{
+											"attribute": "styleClass",
+											"grouping": "Properties",
+											"value": "PMNotifList sapUiTinyMargin",
+											"script": "",
+											"translation": []
+										},
+										{
+											"attribute": "press",
+											"grouping": "Events",
+											"value": "Anonymous Function",
+											"script": "file://event/sap.m.CustomListItem/CustomListItem/press.js",
+											"language": "javascript",
+											"translation": []
+										}
+									],
+									"data": [
+										{
+											"fieldNo": "3d67ad91-ba91-4e73-ccfb-1608ecefebba",
+											"fieldName": "ObjectHeader",
+											"fieldParent": "74c4b5b6-1bfa-4c33-cee7-ca3111f1bcd1",
+											"fieldType": "sap.m.ObjectHeader",
+											"script": "",
+											"request": [],
+											"response": [],
+											"attributes": [
+												{
+													"attribute": "title",
+													"grouping": "Properties",
+													"value": "{NotificationsModel>EQUIPMENT}, {NotificationsModel>EQUIP_DESC}",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "number",
+													"grouping": "Properties",
+													"value": "{NotificationsModel>QMNUM}",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "intro",
+													"grouping": "Properties",
+													"value": "{NotificationsModel>FUNCT_LOC}",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "introActive",
+													"grouping": "Properties",
+													"value": "false",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "titleActive",
+													"grouping": "Properties",
+													"value": "false",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "icon",
+													"grouping": "Properties",
+													"value": "{NotificationsModel>ICON}",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "numberState",
+													"grouping": "Properties",
+													"value": "{NotificationsModel>PHASE}",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "responsive",
+													"grouping": "Properties",
+													"value": "true",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "titleLevel",
+													"grouping": "Properties",
+													"value": "H3",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "styleClass",
+													"grouping": "Properties",
+													"value": "sapUiSizeCompact sapUiNoMargin",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "title",
+													"grouping": "Formatter",
+													"value": "Anonymous Function",
+													"script": "file://event/sap.m.ObjectHeader/ObjectHeader/title.js",
+													"language": "javascript",
+													"translation": []
+												},
+												{
+													"attribute": "number",
+													"grouping": "Formatter",
+													"value": "Anonymous Function",
+													"script": "file://event/sap.m.ObjectHeader/ObjectHeader/number.js",
+													"language": "javascript",
+													"translation": []
+												},
+												{
+													"attribute": "numberState",
+													"grouping": "Formatter",
+													"value": "Anonymous Function",
+													"script": "file://event/sap.m.ObjectHeader/ObjectHeader/numberState.js",
+													"language": "javascript",
+													"translation": []
+												}
+											],
+											"data": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"fieldNo": "c05faba0-a2fd-4bf1-a928-2771ba850bc9",
+							"fieldName": "BarFooter",
+							"fieldParent": "9dbab2e3-0ab0-48c7-bfe4-44a0759da3c4",
+							"fieldType": "sap.m.Bar",
+							"script": "",
+							"request": [],
+							"response": [],
+							"attributes": [
+								{
+									"attribute": "position",
+									"grouping": "Parent",
+									"value": "setFooter",
+									"script": "",
+									"translation": []
+								}
+							],
+							"data": [
+								{
+									"fieldNo": "57654b9c-d8cc-4ffc-f9d0-5d40d39868e0",
+									"fieldName": "left",
+									"fieldParent": "c05faba0-a2fd-4bf1-a928-2771ba850bc9",
+									"fieldType": "neptune.BarContent",
+									"script": "",
+									"request": [],
+									"response": [],
+									"attributes": [
+										{
+											"attribute": "position",
+											"grouping": "Parent",
+											"value": "ContentLeft",
+											"script": "",
+											"translation": []
+										}
+									],
+									"data": [
+										{
+											"fieldNo": "b960e809-055c-4865-9fa5-1af355a2d35c",
+											"fieldName": "btnRefresh",
+											"fieldParent": "57654b9c-d8cc-4ffc-f9d0-5d40d39868e0",
+											"fieldType": "sap.m.Button",
+											"script": "",
+											"request": [],
+											"response": [],
+											"attributes": [
+												{
+													"attribute": "icon",
+													"grouping": "Properties",
+													"value": "sap-icon://refresh",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "press",
+													"grouping": "Events",
+													"value": "Anonymous Function",
+													"script": "file://event/sap.m.Button/btnRefresh/press.js",
+													"language": "javascript",
+													"translation": []
+												}
+											],
+											"data": []
+										}
+									]
+								},
+								{
+									"fieldNo": "d975aee7-b7ae-417c-a155-39278dd42aa3",
+									"fieldName": "right",
+									"fieldParent": "c05faba0-a2fd-4bf1-a928-2771ba850bc9",
+									"fieldType": "neptune.BarContent",
+									"script": "",
+									"request": [],
+									"response": [],
+									"attributes": [
+										{
+											"attribute": "position",
+											"grouping": "Parent",
+											"value": "ContentRight",
+											"script": "",
+											"translation": []
+										}
+									],
+									"data": [
+										{
+											"fieldNo": "797da345-b198-4c32-9deb-3efb5e7eea93",
+											"fieldName": "btnNewNotification",
+											"fieldParent": "d975aee7-b7ae-417c-a155-39278dd42aa3",
+											"fieldType": "sap.m.Button",
+											"script": "",
+											"request": [],
+											"response": [],
+											"attributes": [
+												{
+													"attribute": "text",
+													"grouping": "Properties",
+													"value": "Create Notification",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "icon",
+													"grouping": "Properties",
+													"value": "sap-icon://add-document",
+													"script": "",
+													"translation": []
+												},
+												{
+													"attribute": "press",
+													"grouping": "Events",
+													"value": "Anonymous Function",
+													"script": "file://event/sap.m.Button/btnNewNotification/press.js",
+													"language": "javascript",
+													"translation": []
+												}
+											],
+											"data": []
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"fieldNo": 99999,
+			"data": [
+				{
+					"fieldNo": "db26a9ac-d2b7-496f-92dc-cddc47ecaf04",
+					"fieldName": "Functions",
+					"fieldParent": 99999,
+					"fieldType": "neptune.folder",
+					"script": "",
+					"request": [],
+					"response": [],
+					"attributes": [],
+					"data": [
+						{
+							"fieldNo": "e8d69f66-0e19-4d82-9190-aeb47777be60",
+							"fieldName": "Init",
+							"fieldParent": "db26a9ac-d2b7-496f-92dc-cddc47ecaf04",
+							"fieldType": "neptune.Script",
+							"script": "file://script/neptune.Script/Functions/Init.js",
+							"request": [],
+							"response": [],
+							"attributes": [],
+							"data": []
+						},
+						{
+							"fieldNo": "4237f1bf-ace4-4701-b0fa-9cc17439ebd5",
+							"fieldName": "Functions",
+							"fieldParent": "db26a9ac-d2b7-496f-92dc-cddc47ecaf04",
+							"fieldType": "neptune.Script",
+							"script": "file://script/neptune.Script/Functions/Functions.js",
+							"request": [],
+							"response": [],
+							"attributes": [],
+							"data": []
+						},
+						{
+							"fieldNo": "a8d07380-e450-4fd5-c5fc-c8f7112a30b3",
+							"fieldName": "LocalModels",
+							"fieldParent": "db26a9ac-d2b7-496f-92dc-cddc47ecaf04",
+							"fieldType": "neptune.Script",
+							"script": "file://script/neptune.Script/Functions/LocalModels.js",
+							"request": [],
+							"response": [],
+							"attributes": [],
+							"data": []
+						}
+					]
+				},
+				{
+					"fieldNo": "8b1447b2-97df-43c0-f83a-b090e65015d0",
+					"fieldName": "Model",
+					"fieldParent": 99999,
+					"fieldType": "neptune.folder",
+					"script": "",
+					"request": [],
+					"response": [],
+					"attributes": [],
+					"data": [
+						{
+							"fieldNo": "6550d66c-295d-4318-fe91-4af74a370c52",
+							"fieldName": "Initialize",
+							"fieldParent": "8b1447b2-97df-43c0-f83a-b090e65015d0",
+							"fieldType": "neptune.model",
+							"script": "",
+							"bindingValue": "Generic Array",
+							"bindingType": "h",
+							"bindingSource": "P9",
+							"dataModel": [
+								{
+									"id": "79ee92cc-c882-4415-90e3-897293e55ec5",
+									"parent": "e5006efd-08cc-4788-a639-64a32e38fa0f",
+									"name": "SPRAS",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "37aead07-cec8-44d8-da0b-b103a69c7309",
+									"parent": "e5006efd-08cc-4788-a639-64a32e38fa0f",
+									"name": "ARTPR",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "db949573-807e-4589-a242-af5b16585a0c",
+									"parent": "e5006efd-08cc-4788-a639-64a32e38fa0f",
+									"name": "PRIOK",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "03a68ab8-00fc-45a7-f250-412250ca7265",
+									"parent": "e5006efd-08cc-4788-a639-64a32e38fa0f",
+									"name": "PRIOKX",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "e5006efd-08cc-4788-a639-64a32e38fa0f",
+									"parent": "",
+									"name": "MT_PRIORITIES",
+									"description": "",
+									"isParent": true,
+									"objectType": "array"
+								},
+								{
+									"id": "34287abe-6153-449e-9f9d-e30d5baaf8d6",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "DOMNAME",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "f25b6b82-e679-46e5-c4fe-4ce2b5d2c0c4",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "VALPOS",
+									"description": "",
+									"isParent": true,
+									"objectType": "number"
+								},
+								{
+									"id": "efcf61ec-da37-469e-97e2-8e1ea7ef9897",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "DDLANGUAGE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "ad7f1fe7-e47d-4d14-9144-7ae32f921956",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "DOMVALUE_L",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "a52c9d53-2ac5-4b93-9ac9-8f8c6d307d1b",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "DOMVALUE_H",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "37c16779-05ce-47fd-cf9a-b57237aef633",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "DDTEXT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "4f4c3d93-96f1-4137-a7db-364bc0f3cd9b",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "DOMVAL_LD",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "238cfd51-12a4-4d76-b88c-94e45760a498",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "DOMVAL_HD",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "a979fb39-1175-410d-e6a2-2ec9295d5df1",
+									"parent": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"name": "APPVAL",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "52a6e70a-5c53-414a-9dde-8637ca1f0b94",
+									"parent": "",
+									"name": "MT_STATUS",
+									"description": "",
+									"isParent": true,
+									"objectType": "array"
+								}
+							],
+							"request": [],
+							"response": [],
+							"attributes": [],
+							"data": []
+						},
+						{
+							"fieldNo": "d9644264-d732-46bc-89d2-6104088597a9",
+							"fieldName": "NotificationsModel",
+							"fieldParent": "8b1447b2-97df-43c0-f83a-b090e65015d0",
+							"fieldType": "neptune.model",
+							"script": "",
+							"bindingValue": "Generic Array",
+							"bindingType": "h",
+							"bindingSource": "P9",
+							"dataModel": [
+								{
+									"id": "9ebace38-89d2-4345-cd20-8ab450a761b2",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "QMNUM",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "ede00b5b-1dd1-4b9d-88c5-aa4c8b46da9f",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "INSTID_A",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "9ec3d450-e321-4fe9-e875-70ccfcb5e80c",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "INSTID_B",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "f6e4a4eb-5ecf-4ae0-960d-60f6104e934a",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "CRDAT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "d4b0b466-5ad3-4e5f-b1fc-e47e4ebc527b",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "CRTIM",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "c5e2a5a7-2e60-4c75-d39e-df9d1841b784",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "DOCDES",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "76188beb-2940-49f2-9b19-e852c1e3261a",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "FILE_EXT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "4d25fd1a-ea4e-42e3-86e8-e3dcc5dcf222",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "CONTENT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "ad121bec-2cf4-4e0d-e3e9-1604dabcfe9d",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "ACTION",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "07bd31d4-fd4c-402a-f24c-d3c0477ead48",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "ICON",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "485826a0-06f1-4871-e527-e93e45dba75c",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "HIGHLIGHT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "5831c7d8-e3a7-4a88-8509-1e5ed3e882e5",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "USER",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "bd8c9d04-69da-41ac-e79d-0b68cbc37933",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "USERNAME",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "acc5416c-8f76-473f-f33e-764725547ebb",
+									"parent": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"name": "ID",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "85609fa5-b84f-4555-db4a-11c6ffe576b2",
+									"parent": "",
+									"name": "MT_NOTES",
+									"description": "",
+									"isParent": true,
+									"objectType": "array"
+								},
+								{
+									"id": "42671da5-5cda-445a-898b-68d5159d576f",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "REFOBJECTTYPE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "0ef65b82-fc29-4f5f-a7ab-2b831918be25",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "REFOBJECTKEY",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "c930362a-3955-4292-9c76-1c8b36fd8abf",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "REFRELTYPE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "845b7b9a-92d1-4c21-87a7-22d16cd2fd0f",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "EQUIPMENT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "1d67b133-b08a-47a2-9b14-1e3fc0625990",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "FUNCT_LOC",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "6372b73f-9dd0-4613-bdd6-91498ad33e45",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ASSEMBLY",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "6322723c-d840-4878-b77c-025c9f8d572f",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SERIALNO",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "bcc9d8d8-d0b4-4d79-fdc6-00877ebfac6d",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MATERIAL",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "622b08e7-5736-4e07-a6a8-128caec03186",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DIVISION",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "7ff2df08-c826-4d2d-b2fd-a96afe9abc3d",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SALES_ORG",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "90510b8b-3b25-43af-f764-8065c01a2125",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DISTR_CHAN",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "2bd104d5-8e10-428c-8645-d4919db3aea5",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SALES_OFFICE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "847d2c44-5014-4374-bdfc-f75dec27a78d",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SALES_GRP",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "6cc608a5-80bf-46e8-892f-80262ab4a64d",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SHORT_TEXT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "506821ad-0c2a-464d-aaeb-c028b365d648",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "PRIORITY",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "231fe447-ce50-4091-9728-ef99cc6a6701",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DESSTDATE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "d3d9f5c2-43b2-409b-cd00-af6d7d6fb834",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DESSTTIME",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "562a2592-0f7b-4be1-a9fe-3c37a6c63516",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DESENDDATE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "4aaecdd5-e744-463a-d5c9-0f4113cef786",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DESENDTM",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "c214830a-bec4-4a50-8871-fee31d23e698",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DEVICEDATA",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "836a2c96-d460-4342-b76a-0d546058e743",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "PM_WKCTR",
+									"description": "",
+									"isParent": true,
+									"objectType": "number"
+								},
+								{
+									"id": "ab80ba6a-174e-4b2d-9a73-55909c2a0f7a",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "PURCH_NO_C",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "5f4fa78d-ae13-4fe6-d345-ad495886f166",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "PURCH_DATE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "1de7246b-9779-4952-c845-d8dcf6944aa6",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "PLANPLANT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "4a912d94-bb79-42a1-a4cd-9f54df4dce4d",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "PLANGROUP",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "6c2ba6c6-cbb4-49c2-f4be-a43ae1fb8d81",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "BREAKDOWN",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "976b7b62-febe-4808-bb30-64693fce9991",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "STRMLFNDATE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "7d92d3ad-7c36-49e5-cd18-2c38df26ad42",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "STRMLFNTIME",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "76c7a2c6-4ca4-4373-a360-66e26778e4bf",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "REPORTEDBY",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "7bfd5b05-2b04-4546-fc8f-ce35867a11b5",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "NOTIF_DATE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "ec91a84a-e5b3-4b96-d383-8a7ed3c4ae4c",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "NOTIFTIME",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "31ba789e-137a-4a24-d3b8-436400e5cea9",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "CODE_GROUP",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "2c7e009c-6511-4301-b691-c862ec2197c4",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "CODING",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "046ac5ed-e446-4408-aa7a-6c4771201040",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DOC_NUMBER",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "95e06df1-0a60-48f0-c452-14a55ebba4aa",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ITM_NUMBER",
+									"description": "",
+									"isParent": true,
+									"objectType": "number"
+								},
+								{
+									"id": "68669180-0411-42e1-bb8c-2193ba52b574",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ENDMLFNDATE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "05e05cf5-875b-4dba-850a-6a2b40165f06",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ENDMLFNTIME",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "57ed0102-0402-4cb9-e61f-0ccaac611c7e",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SCENARIO",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "321fa976-75be-4c05-e29c-1a55c7f02e0f",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ASSEMBLY_EXTERNAL",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "1fcc98cd-00ce-415d-9f3e-ac5a47cdddc6",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ASSEMBLY_GUID",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "1e55b672-c828-4aab-f41e-581140db5baa",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ASSEMBLY_VERSION",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "bf5d7d21-6574-4895-dfa2-564914ab37d4",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MATERIAL_EXTERNAL",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "dfac5288-3877-4d5d-b1d3-5d4766bd0719",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MATERIAL_GUID",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "1130a6bd-6fd3-41f7-aee6-ebe846b7f8ad",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MATERIAL_VERSION",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "e488888e-4567-4bff-e900-3e7cafec3695",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MAINTPLANT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "88074cf0-2954-47c8-d4ef-bc6819c68688",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MAINTLOC",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "223665b8-1a02-4fcb-93ae-cb196dd0c3dd",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MAINTROOM",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "e22d4817-7ed0-45f6-f973-feacf60e7da6",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "START_POINT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "ade2b8e2-0b03-4eb7-c19a-b515e159a0cf",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "END_POINT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "434add31-1f24-4532-bba6-61c366fe765e",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "LINEAR_LENGTH",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "c7fad63d-16fe-443a-b180-50dd3e2d598c",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "LINEAR_UNIT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "fe212b21-fae2-459d-94a9-243a4d1a3ef1",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "LINEAR_UNIT_ISO",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "353cbae0-c29e-4847-98cf-7cbb76b05bf0",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "FIRST_OFFSET_TYPE_CODE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "441fd743-2229-4a2a-dc0f-bbcd0f81d45b",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "FIRST_OFFSET_VALUE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "464c6cfc-257f-494f-d15f-0930c9d0bb54",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "FIRST_OFFSET_UNIT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "43452f2a-352d-4ab9-c46c-893fe792398c",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "FIRST_OFFSET_UNIT_ISO",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "8ced8d63-de59-4d0a-eec9-33b4d0db9435",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SECOND_OFFSET_TYPE_CODE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "23ebf477-edec-41cd-d77e-fdb967a848ac",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SECOND_OFFSET_VALUE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "4e689873-8693-42dc-c5cf-793bd07744ba",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SECOND_OFFSET_UNIT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "5e51b60d-d634-4a9e-bd53-af3bcb1b9d1a",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SECOND_OFFSET_UNIT_ISO",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "32ee2041-7c45-4341-ab1c-9929f3f3073a",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MARKER_START_POINT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "1d9ab16d-5f45-4240-a57f-1c9d70f421a4",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MARKER_DISTANCE_START_POINT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "d3b6355b-7f5a-4d89-91e5-fb2dc73f91de",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MARKER_END_POINT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "c11d69a4-fc61-4960-a6c6-858fdf76898f",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MARKER_DISTANCE_END_POINT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "2263d04f-854f-4c55-fc5e-3696d40942ea",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MARKER_DISTANCE_UNIT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "eff412c4-3ad9-4e86-a5cc-f8767efe087e",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MARKER_DISTANCE_UNIT_ISO",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "cf5ad63c-40d6-4480-b9e3-69a25b811890",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "SORTFIELD",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "0a863624-eb7f-4a9d-f20b-a526cd20a286",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "EFFECT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "1bf4846b-6959-4940-8a8b-812a1a828d3d",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ASSEMBLY_LONG",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "f5868864-93d6-480f-f9f7-fd1dd4a2cb63",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MATERIAL_LONG",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "806841c7-fa13-4edd-f878-4660b0633d6d",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "REVISION_PM_CS",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "513e9a84-daac-4bf0-80de-4a50ce9c7d08",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "LACD_DATE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "99163051-642c-45a2-f96c-9f7844adf227",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "OLD_LACD_DATE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "68679e69-99df-42ad-80c0-55b1bd5c74ac",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DETECTIONCATALOG",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "9002d941-e3bf-40fb-f3ad-a46e1a76f08a",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DETECTIONCODEGROUP",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "e183c1b2-9b61-4ecd-c6ce-49dfb4cc200f",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "DETECTIONCODE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "e4a9e944-50e3-4fb3-c61f-1993b0c4ee63",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "NOTIFREJECTIONREASONCODE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "3a0f2aac-9457-431c-bcf4-d5363564a72f",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "REF_EXT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "e13393fa-4c0b-4ab5-bbf3-eaee4b94dbb4",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "HIGHLIGHT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "7fef7c08-b5c6-486d-8a15-c7a765ceeb8b",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ICON",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "61f801ef-36f6-4468-9d83-0554806b5293",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "TPLNR",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "58a0720d-4e9e-4ba7-b0c8-7d08bebc8af6",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "QMART",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "ff817296-8982-4910-f951-c7f49739c5d7",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "QMNUM",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "c5e216b2-1da4-4662-f3d2-25ce32424531",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "QMTXT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "456597c7-44a7-498f-9b33-57cc0c392a31",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "MALFUNCTION",
+									"description": "",
+									"isParent": true,
+									"objectType": "boolean"
+								},
+								{
+									"id": "07b24184-af37-41ab-efad-68cb9c386fe6",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "BRKDOWN",
+									"description": "",
+									"isParent": true,
+									"objectType": "boolean"
+								},
+								{
+									"id": "1dbe7e7a-234a-4545-a9d8-2d1b44f172cc",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "EQUIP_DESC",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "717efbef-9760-4aeb-8c84-b8aef1d6cc03",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "FLOC_DESC",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "ff989c1a-faa5-40a2-ff8d-cf89a21420b6",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "PHASE",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "8f42012e-cd73-4f91-f4a7-c818cf9998cf",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "STATUS_TEXT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "8719bfe0-2c57-404a-cb35-422cdb6dc478",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "LONG_TEXT",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "5e0623b3-5b78-4c3c-8fe0-f62046ce2a04",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "NEW_MESSAGE",
+									"description": "",
+									"isParent": true,
+									"objectType": "boolean"
+								},
+								{
+									"id": "50409ff8-6617-4084-b6f8-9c4d462cf613",
+									"parent": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"name": "ID",
+									"description": "",
+									"isParent": true,
+									"objectType": "string"
+								},
+								{
+									"id": "33124785-025a-4709-9fab-ad4c7d893acd",
+									"parent": "",
+									"name": "MT_NOTIFICATIONS",
+									"description": "",
+									"isParent": true,
+									"objectType": "array"
+								}
+							],
+							"request": [],
+							"response": [],
+							"attributes": [],
+							"data": []
+						}
+					]
+				},
+				{
+					"fieldNo": "add3899b-c7af-4f82-c76f-eddeab459ac7",
+					"fieldName": "APIs",
+					"fieldParent": 99999,
+					"fieldType": "neptune.folder",
+					"script": "",
+					"request": [],
+					"response": [],
+					"attributes": [],
+					"data": [
+						{
+							"fieldNo": "ef18aad3-96ef-4b58-bfa9-921948d9c660",
+							"fieldName": "INITIALIZE",
+							"fieldParent": "add3899b-c7af-4f82-c76f-eddeab459ac7",
+							"fieldType": "neptune.restapi",
+							"script": "",
+							"restSource": "ad9a5da0-b226-f111-9a49-000d3ab26ded",
+							"restOperation": "e5d07d22-2038-4f42-952c-1354bf70052c",
+							"request": [],
+							"response": [
+								{
+									"status": "200",
+									"dataId": "e310c1a4-aec0-462f-9401-bbb2e9f5b0bc",
+									"modelFieldNo": "6550d66c-295d-4318-fe91-4af74a370c52"
+								}
+							],
+							"attributes": [
+								{
+									"attribute": "setInitLoad",
+									"grouping": "Model",
+									"value": "online",
+									"script": "",
+									"translation": []
+								},
+								{
+									"attribute": "ajaxSuccess",
+									"grouping": "Events",
+									"value": "modelInitialize.setData(xhr.responseJSON.result);",
+									"script": "modelInitialize.setData(xhr.responseJSON.result);",
+									"translation": []
+								},
+								{
+									"attribute": "ajaxError",
+									"grouping": "Events",
+									"value": "modelInitialize.setData(localInitialize);",
+									"script": "modelInitialize.setData(localInitialize);",
+									"translation": []
+								}
+							],
+							"data": []
+						},
+						{
+							"fieldNo": "74cecbb0-4606-48d8-a704-32a47c722581",
+							"fieldName": "GET_MY_NOTIFICATIONS",
+							"fieldParent": "add3899b-c7af-4f82-c76f-eddeab459ac7",
+							"fieldType": "neptune.restapi",
+							"script": "",
+							"restSource": "ad9a5da0-b226-f111-9a49-000d3ab26ded",
+							"restOperation": "a34c1aa0-60bc-45ef-8976-7c2f2df47643",
+							"request": [],
+							"response": [],
+							"attributes": [
+								{
+									"attribute": "setInitLoad",
+									"grouping": "Model",
+									"value": "online",
+									"script": "",
+									"translation": []
+								},
+								{
+									"attribute": "ajaxSuccess",
+									"grouping": "Events",
+									"value": "Anonymous Function",
+									"script": "file://event/neptune.restapi/GET_MY_NOTIFICATIONS/ajaxSuccess.js",
+									"language": "javascript",
+									"translation": []
+								},
+								{
+									"attribute": "ajaxError",
+									"grouping": "Events",
+									"value": "Anonymous Function",
+									"script": "file://event/neptune.restapi/GET_MY_NOTIFICATIONS/ajaxError.js",
+									"language": "javascript",
+									"translation": []
+								}
+							],
+							"data": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"fieldNo": 99998,
+			"data": []
+		}
+	],
+	"componentInterface": [],
+	"ver": "26.03.31.1147",
+	"application": "pm_notification_list_tmp",
+	"title": "",
+	"description": "",
+	"enableFileStorage": false,
+	"enableManifest": false,
+	"enableStylesheet": true,
+	"enableObfuscate": false,
+	"onlyRunLaunchpad": false,
+	"disabled": false,
+	"loadLaunchpadCode": null,
+	"loadApplicationCode": null,
+	"appType": "A",
+	"ui5_m": true,
+	"ui5_f": false,
+	"ui5_table": false,
+	"ui5_tnt": false,
+	"ui5_uxap": false,
+	"ui5_integration": null,
+	"ui5_chart": false,
+	"ui5_theme": "sap_horizon",
+	"ui5_version": "",
+	"ui5_language": null,
+	"ui5_url": "",
+	"cus_theme": "",
+	"css": "file:///css.css",
+	"compiledCss": "file:///compiledCss.css",
+	"header": "",
+	"manifest": "",
+	"globalScript": null,
+	"deleted": false,
+	"libHighchart": false,
+	"libHighmap": false,
+	"publicAccess": false,
+	"ui5_bootstrap": false,
+	"ui5_ionic": false,
+	"useV2AppHandler": false,
+	"compilerTarget": 99,
+	"tabWidth": null,
+	"printWidth": null,
+	"generateVersionOnActivation": false,
+	"activationHistoryCount": 0,
+	"package": "42eac27b-a018-f111-832e-000d3ab36aa2",
+	"apis": [
+		{
+			"id": "ad9a5da0-b226-f111-9a49-000d3ab26ded",
+			"name": "ZCL_UI_PM_NOTIFICATION_DXP_TMP",
+			"ver": "26.03.31.1550"
+		}
+	],
+	"i18n": []
+}

@@ -1,0 +1,3 @@
+clearScreen();
+
+AppCacheNav.back();

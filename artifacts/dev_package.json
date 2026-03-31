@@ -1,0 +1,110 @@
+{
+	"id": "42eac27b-a018-f111-832e-000d3ab36aa2",
+	"createdAt": "2026-03-05T14:34:58.540Z",
+	"createdBy": "daniel.vieira@neptune-software.com",
+	"git": {
+		"remote": "https://github.com/neptune-software-marketplace/neptunesoftware-dxp-abb-plantmaintenance",
+		"branch": "master"
+	},
+	"name": " neptunesoftware-dxp-abb-plantmaintenance",
+	"description": null,
+	"ver": "26.03.31.1617",
+	"enableCICD": true,
+	"internalReadOnly": false,
+	"oeVersion": null,
+	"excludeTemplateFiles": false,
+	"roles": [],
+	"apps": [
+		{
+			"id": "fabaf8ce-6894-f011-b3cd-000d3ab202d6",
+			"application": "pm_notification_list_tmp",
+			"title": "",
+			"description": ""
+		},
+		{
+			"id": "786cfc8c-6c94-f011-b3cd-000d3ab202d6",
+			"application": "pm_hierarchylist_tmp",
+			"title": "",
+			"description": ""
+		},
+		{
+			"id": "0108cc87-6b94-f011-b3cd-000d3ab202d6",
+			"application": "pm_notification_tmp",
+			"title": "",
+			"description": ""
+		}
+	],
+	"api": [
+		{
+			"id": "ad9a5da0-b226-f111-9a49-000d3ab26ded",
+			"name": "ZCL_UI_PM_NOTIFICATION_DXP_TMP",
+			"description": null,
+			"apiGroup": null
+		}
+	],
+	"odataSource": [],
+	"odataMock": [],
+	"dictionary": [],
+	"jsclass": [],
+	"jsscript_group": [],
+	"theme": [],
+	"theme_generator": [],
+	"pdf": [],
+	"rulesengine": [],
+	"reports": [],
+	"api_authentication": [],
+	"api_group": [],
+	"tile": [
+		{
+			"id": "4aa3f903-70d9-4219-bd99-4d81be597129",
+			"description": null,
+			"name": "PM - Technical Objects Template"
+		},
+		{
+			"id": "42300103-3828-f111-9a49-000d3ab26ded",
+			"description": null,
+			"name": "PM - Notifications Template"
+		}
+	],
+	"tile_layout": [],
+	"category": [
+		{
+			"id": "25c6386b-3828-f111-9a49-000d3ab26ded",
+			"description": null,
+			"name": "Plant Maintenance Template Apps"
+		}
+	],
+	"tilegroup_layout": [],
+	"launchpad": [
+		{
+			"id": "37ea2643-3928-f111-9a49-000d3ab26ded",
+			"name": "PM_Launchpad_Template_Apps",
+			"description": null
+		}
+	],
+	"launchpad_layout": [],
+	"certificates": [],
+	"role": [],
+	"systems": [],
+	"doc": [],
+	"wf_notifications": [],
+	"department": [],
+	"script_scheduler": [],
+	"wf_definition": [],
+	"connector": [],
+	"i18n": [],
+	"events": [],
+	"code_snippets": [],
+	"wf_determination": [],
+	"wf_taskaction": [],
+	"theme_ui5": [],
+	"webapp": [],
+	"ui5_control": [],
+	"ai_agent": [],
+	"ai_model": [],
+	"ai_prompt": [],
+	"ai_tool": [],
+	"ai_guardrail": [],
+	"path_rewrite": [],
+	"vault": []
+}
