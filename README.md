@@ -63,7 +63,8 @@ The setup guide for the required files to be imported and used in Neptune DXP SA
 Begin by copying the ABAP source code for each custom ZIF interface into the SAP Class Builder using the SAP TCode _**'SE24'**_.
 
 Subsequently, copy the ABAP source code for the custom ZCL data provider class into the SAP TCode _**'SE24'**_ and activate the class. Upon successful import, the data provider class should appear as shown below: 
-<img width="1201" height="794" alt="image" src="https://github.com/user-attachments/assets/9cac9f1e-9863-462b-ae8e-158ec369e9c1" />
+<img width="1180" height="771" alt="image" src="https://github.com/user-attachments/assets/344d1759-63c1-460a-87f0-bdc89ecd7434" />
+
 
 
 ### Step 2. Access the Neptune cockpit & using the API Factory
@@ -71,7 +72,9 @@ Subsequently, copy the ABAP source code for the custom ZCL data provider class i
 After successfully importing and activating the ABAP **_ZIF_** interfaces (**_'ZIF_UI_PM_NOTIF_DXP_TMP_GET'_** & **_'ZIF_UI_PM_NOTIF_DXP_TMP_GET'_**) and the corresponding **_'ZCL'_** data provider class (**_'ZCL_UI_PM_NOTIFICATION_DXP_TMP'_**), open the Neptune DXP SAP Edition Cockpit using transaction **_'/n/NEPTUNE/COCKPIT' _** in a new SAP GUI window.
 
 From the Neptune DXP SAP Edition Cockpit, navigate to the **_API Factory tool_** and select the newly created ABAP data provider class. The generated API name will correspond directly to the name of the ABAP class (**_'ZCL_UI_PM_NOTIFICATION_DXP_TMP'_**) defined in the SAP backend system.
-<img width="3694" height="1060" alt="image" src="https://github.com/user-attachments/assets/07118170-434e-4a3d-9161-eaf5e7e50be1" />
+<img width="1788" height="732" alt="image" src="https://github.com/user-attachments/assets/5268e72a-4d54-4cf7-a59b-831978c9b6b2" />
+
+
 
 
 Navigate to the Policy tab and set the _Unrestricted API Engine_ option to **'Yes'** to allow unrestricted access to the API.
@@ -79,11 +82,9 @@ If access control is required, define a custom policy by selecting **'Add'**, as
 <img width="1006" height="602" alt="image" src="https://github.com/user-attachments/assets/4ba16006-88d1-465b-ab43-414269e33afc" /> 
 
 Once the policy configuration is complete, the API can be validated and tested using the _**'Swagger UI'**_ tab prior to being consumed by applications running on Neptune DXP Open Edition.
-<img width="3695" height="1933" alt="image" src="https://github.com/user-attachments/assets/ec63a8ba-0de5-485e-9b08-22b4dd89eb0a" />
+<img width="3090" height="1943" alt="image" src="https://github.com/user-attachments/assets/3ae09039-1d7b-48c7-aa7f-637b68b4bd5d" />
 
-
-<img width="2117" height="1299" alt="image" src="https://github.com/user-attachments/assets/aae20865-ecd1-4e4c-9d5b-f9528bd8e4eb" />
-
+<img width="2980" height="1568" alt="image" src="https://github.com/user-attachments/assets/fefc1873-a090-47d9-8145-b7f23c90bcd5" />
 
 ## Neptune DXP Open Edition Setup
 
@@ -92,13 +93,14 @@ Once the policy configuration is complete, the API can be validated and tested u
 In Neptune DXP Open Edition, the downloaded Marketplace bundle includes a preconfigured API definition. All operations, schemas, and mappings are already defined and **_DO NOT_** require modification. The only required change is to update the API _endpoint URL_ from
 "_https://Your_SAP_Edition_URL.neptune-software.com/neptune/api/dynamic/zcl_ui_pm_notification_dxp_tmp_"
 to the actual endpoint exposed by the API Factory in your Neptune DXP SAP Edition system.
-<img width="2507" height="1931" alt="image" src="https://github.com/user-attachments/assets/c878fd40-44f4-4fc0-b686-309c7b5f4539" />
+<img width="2854" height="1747" alt="image" src="https://github.com/user-attachments/assets/0e283f1d-2075-4800-8dfa-b94778d332fd" />
+
 
 The generated API endpoint can be retrieved from the _API Factory tool_ in Neptune DXP SAP Edition under the _Swagger UI_ tab. Either of the provided service URLs may be used as the base endpoint for the API configuration in Neptune DXP Open Edition.
-<img width="1805" height="623" alt="image" src="https://github.com/user-attachments/assets/edcbe8a2-7542-4534-a91b-069e134e9dbb" />
+<img width="2816" height="420" alt="image" src="https://github.com/user-attachments/assets/8b8b2b5b-5470-4d16-8882-a3e2e28614a6" />
 
 In the _**'API Designer'**_ tool of Neptune DXP Open Edition, replace the existing endpoint with the newly retrieved SAP Edition API Factory URL and save the configuration.
-<img width="1828" height="244" alt="image" src="https://github.com/user-attachments/assets/81fa4c3f-aea3-489b-a176-ea7b69b354da" />
+<img width="2653" height="369" alt="image" src="https://github.com/user-attachments/assets/f3934114-a24a-4d71-a9bc-2445ed4752dc" />
 
 As a final step, verify that the _Enable Proxy_ and _Use in App Designer_ options remain enabled (these are selected by default). Since the API is consumed externally from SAP to Neptune DXP Open Edition, **'proxy-based authentication'** must be configured.
 
@@ -106,6 +108,6 @@ As a final step, verify that the _Enable Proxy_ and _Use in App Designer_ option
 
 
 To secure the API, assign a _**'Proxy Authentication'**_ configuration based on an existing SAP user. Additional authentication mechanisms can be created and managed using the _Proxy Authentication_ tool, if required.
-<img width="1296" height="336" alt="image" src="https://github.com/user-attachments/assets/146dc5e3-0fca-4a39-9a4f-d6087a701be1" />
+<img width="1682" height="499" alt="image" src="https://github.com/user-attachments/assets/e5d43db2-11f7-4e63-a589-68ecec37c0e1" />
 
 Now the API is ready to be consumed and the app can retrieve the data from SAP in Neptune DXP Open Edition. 
