@@ -17,4 +17,5 @@ neptune.Shell.attachInit(function (data, navObj) {
     modelInit.setProperty("/showHistory", showHistory);
     modelInit.setProperty("/external", external);
 
+    diaDemoGuide.open();
 });

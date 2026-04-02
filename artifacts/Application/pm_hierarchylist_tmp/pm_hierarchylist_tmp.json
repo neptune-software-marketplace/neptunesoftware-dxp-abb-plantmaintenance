@@ -692,7 +692,178 @@
 					"request": [],
 					"response": [],
 					"attributes": [],
-					"data": []
+					"data": [
+						{
+							"fieldNo": "feddb32c-2281-4161-8bbf-0163b15d6fbc",
+							"fieldName": "diaDemoGuide",
+							"fieldParent": "448b4b51-d9d8-4199-bf7f-52d8243187f9",
+							"fieldType": "sap.m.Dialog",
+							"script": "",
+							"request": [],
+							"response": [],
+							"attributes": [
+								{
+									"attribute": "title",
+									"grouping": "Properties",
+									"value": "How to navigate through this app?",
+									"script": "",
+									"translation": []
+								},
+								{
+									"attribute": "type",
+									"grouping": "Properties",
+									"value": "Message",
+									"script": "",
+									"translation": []
+								},
+								{
+									"attribute": "contentWidth",
+									"grouping": "Properties",
+									"value": "100%",
+									"script": "",
+									"translation": []
+								},
+								{
+									"attribute": "contentHeight",
+									"grouping": "Properties",
+									"value": "100%",
+									"script": "",
+									"translation": []
+								},
+								{
+									"attribute": "verticalScrolling",
+									"grouping": "Properties",
+									"value": "false",
+									"script": "",
+									"translation": []
+								},
+								{
+									"attribute": "enableCompactMode",
+									"grouping": "Properties",
+									"value": "true",
+									"script": "",
+									"translation": []
+								}
+							],
+							"data": [
+								{
+									"fieldNo": "aaac3dc8-90d2-4ce5-f170-29d7f5dbd81e",
+									"fieldName": "oBarCustomHeader",
+									"fieldParent": "feddb32c-2281-4161-8bbf-0163b15d6fbc",
+									"fieldType": "sap.m.Bar",
+									"script": "",
+									"request": [],
+									"response": [],
+									"attributes": [
+										{
+											"attribute": "position",
+											"grouping": "Parent",
+											"value": "setCustomHeader",
+											"script": "",
+											"translation": []
+										}
+									],
+									"data": [
+										{
+											"fieldNo": "849c2dba-7baf-453b-b4c5-6829113c02e5",
+											"fieldName": "Middle",
+											"fieldParent": "aaac3dc8-90d2-4ce5-f170-29d7f5dbd81e",
+											"fieldType": "neptune.BarContent",
+											"script": "",
+											"request": [],
+											"response": [],
+											"attributes": [
+												{
+													"attribute": "position",
+													"grouping": "Parent",
+													"value": "ContentMiddle",
+													"script": "",
+													"translation": []
+												}
+											],
+											"data": []
+										},
+										{
+											"fieldNo": "212976b3-5b15-4276-b8da-26c418d14a2a",
+											"fieldName": "Right",
+											"fieldParent": "aaac3dc8-90d2-4ce5-f170-29d7f5dbd81e",
+											"fieldType": "neptune.BarContent",
+											"script": "",
+											"request": [],
+											"response": [],
+											"attributes": [
+												{
+													"attribute": "position",
+													"grouping": "Parent",
+													"value": "ContentRight",
+													"script": "",
+													"translation": []
+												}
+											],
+											"data": [
+												{
+													"fieldNo": "a76a39b4-adbe-4ad9-e9b5-9580e29daa30",
+													"fieldName": "btndiaDemoGuideClose",
+													"fieldParent": "212976b3-5b15-4276-b8da-26c418d14a2a",
+													"fieldType": "sap.m.Button",
+													"script": "",
+													"request": [],
+													"response": [],
+													"attributes": [
+														{
+															"attribute": "press",
+															"grouping": "Events",
+															"value": "diaDemoGuide.close();",
+															"script": "diaDemoGuide.close();",
+															"translation": []
+														},
+														{
+															"attribute": "type",
+															"grouping": "Properties",
+															"value": "Negative",
+															"script": "",
+															"translation": []
+														},
+														{
+															"attribute": "icon",
+															"grouping": "Properties",
+															"value": "sap-icon://sys-cancel",
+															"script": "",
+															"translation": []
+														}
+													],
+													"data": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"fieldNo": "97595caa-31ec-4469-a9f5-e75ba0cf90ac",
+									"fieldName": "HTMLObject",
+									"fieldParent": "feddb32c-2281-4161-8bbf-0163b15d6fbc",
+									"fieldType": "sap.ui.core.HTML",
+									"script": "",
+									"request": [],
+									"response": [],
+									"attributes": [],
+									"data": [
+										{
+											"fieldNo": "e3a8a050-3afb-4138-f96e-72dbd1d51f05",
+											"fieldName": "HTMLCode",
+											"fieldParent": "97595caa-31ec-4469-a9f5-e75ba0cf90ac",
+											"fieldType": "neptune.Html",
+											"script": "file://script/neptune.Html/HTMLCode.script",
+											"request": [],
+											"response": [],
+											"attributes": [],
+											"data": []
+										}
+									]
+								}
+							]
+						}
+					]
 				},
 				{
 					"fieldNo": "883fa416-d51b-4ac3-9cce-e1103aa98b42",
@@ -811,7 +982,7 @@
 		}
 	],
 	"componentInterface": [],
-	"ver": "26.03.31.1548",
+	"ver": "26.04.02.1057",
 	"application": "pm_hierarchylist_tmp",
 	"title": "",
 	"description": "",
@@ -858,7 +1029,7 @@
 		{
 			"id": "ad9a5da0-b226-f111-9a49-000d3ab26ded",
 			"name": "ZCL_UI_PM_NOTIFICATION_DXP_TMP",
-			"ver": "26.03.31.1550"
+			"ver": "26.04.02.1102"
 		}
 	],
 	"i18n": []
